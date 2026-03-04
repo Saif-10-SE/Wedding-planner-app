@@ -24,11 +24,11 @@ export default function FavoriteButton({ slug, className = '', size = 'md' }) {
         e.stopPropagation();
         toggleFavorite(slug);
       }}
-      className={`${sizes[size]} rounded-full flex items-center justify-center transition-all ${
+      className={`${sizes[size]} rounded-full flex items-center justify-center transition-all duration-500 ${
         favorite 
-          ? 'bg-rani-500 text-white scale-110' 
-          : 'bg-white/90 backdrop-blur-sm text-gray-600 hover:bg-rani-50 hover:text-rani-500'
-      } shadow-lg hover:shadow-xl ${className}`}
+          ? 'bg-rose-500 text-white scale-110' 
+          : 'bg-white/90 backdrop-blur-sm text-primary-400 hover:bg-rose-50 hover:text-rose-500'
+      } shadow-luxury hover:shadow-luxury-md ${className}`}
     >
       <Heart 
         className={`${iconSizes[size]} transition-transform ${favorite ? 'fill-current animate-heartBeat' : ''}`} 

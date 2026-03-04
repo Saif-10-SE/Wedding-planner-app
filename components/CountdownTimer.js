@@ -30,8 +30,8 @@ export default function CountdownTimer({ targetDate, className = '' }) {
   if (timeLeft.expired) {
     return (
       <div className={`text-center ${className}`}>
-        <p className="text-2xl font-serif text-mehndi-500">🎉 Mubarak Ho! 🎊</p>
-        <p className="text-maroon-500">Aapka khaas din aa gaya hai! 💖</p>
+        <p className="text-2xl font-serif text-accent-500">🎉 Congratulations! 🎊</p>
+        <p className="text-primary-500">Your special day is here! 💖</p>
       </div>
     );
   }
@@ -39,24 +39,24 @@ export default function CountdownTimer({ targetDate, className = '' }) {
   const TimeUnit = ({ value, label }) => (
     <div className="text-center">
       <div className="relative">
-        <div className="bg-gradient-to-br from-maroon-800 to-maroon-900 text-mehndi-400 text-3xl md:text-5xl font-bold rounded-xl px-4 py-3 min-w-[80px] md:min-w-[100px] shadow-lg border border-mehndi-500/10">
+        <div className="bg-white/10 backdrop-blur-sm text-white text-3xl md:text-5xl font-serif font-light rounded-xl px-4 py-3 min-w-[80px] md:min-w-[100px] shadow-luxury border border-white/10">
           {String(value).padStart(2, '0')}
         </div>
-        <div className="absolute -bottom-1 left-0 right-0 h-1/2 bg-black/10 rounded-b-xl"></div>
+        <div className="absolute -bottom-1 left-0 right-0 h-1/2 bg-black/5 rounded-b-xl"></div>
       </div>
-      <p className="text-xs md:text-sm text-maroon-500 mt-2 uppercase tracking-wider">{label}</p>
+      <p className="text-[10px] md:text-xs text-white/40 mt-2 uppercase tracking-[0.2em] font-light">{label}</p>
     </div>
   );
 
   return (
     <div className={`flex gap-3 md:gap-6 justify-center ${className}`}>
-      <TimeUnit value={timeLeft.days} label="Din" />
-      <div className="text-3xl md:text-5xl text-mehndi-500 self-start mt-3">:</div>
-      <TimeUnit value={timeLeft.hours} label="Ghante" />
-      <div className="text-3xl md:text-5xl text-mehndi-500 self-start mt-3">:</div>
-      <TimeUnit value={timeLeft.minutes} label="Minute" />
-      <div className="text-3xl md:text-5xl text-mehndi-500 self-start mt-3">:</div>
-      <TimeUnit value={timeLeft.seconds} label="Second" />
+      <TimeUnit value={timeLeft.days} label="Days" />
+      <div className="text-3xl md:text-5xl text-white/20 self-start mt-3 font-light">:</div>
+      <TimeUnit value={timeLeft.hours} label="Hours" />
+      <div className="text-3xl md:text-5xl text-white/20 self-start mt-3 font-light">:</div>
+      <TimeUnit value={timeLeft.minutes} label="Min" />
+      <div className="text-3xl md:text-5xl text-white/20 self-start mt-3 font-light">:</div>
+      <TimeUnit value={timeLeft.seconds} label="Sec" />
     </div>
   );
 }

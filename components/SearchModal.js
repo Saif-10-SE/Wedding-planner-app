@@ -30,26 +30,26 @@ export default function SearchModal() {
 
   return (
     <div
-      className="fixed inset-0 z-[100] bg-maroon-900/70 backdrop-blur-sm flex items-start justify-center pt-20 px-4"
+      className="fixed inset-0 z-[100] bg-primary-950/60 backdrop-blur-md flex items-start justify-center pt-20 px-4"
       onClick={() => setIsSearchOpen(false)}
     >
       <div
-        className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden animate-fadeIn border border-mehndi-200"
+        className="bg-white w-full max-w-2xl rounded-2xl shadow-luxury-xl overflow-hidden animate-fadeIn border border-neutral-200/60"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Input */}
-        <div className="flex items-center border-b border-mehndi-200 px-4">
-          <Search className="w-5 h-5 text-mehndi-500" />
+        <div className="flex items-center border-b border-neutral-200 px-4">
+          <Search className="w-5 h-5 text-primary-300" />
           <input
             ref={inputRef}
             type="text"
             value={searchQuery}
             onChange={(e) => performSearch(e.target.value)}
-            placeholder="🔍 Venue, location, ya suholiyaat dhoondhein..."
-            className="flex-1 px-4 py-4 text-lg outline-none text-maroon-800 placeholder:text-maroon-300"
+            placeholder="Search venues, locations, amenities..."
+            className="flex-1 px-4 py-4 text-lg outline-none text-primary-900 placeholder:text-primary-300 font-light"
           />
-          <button onClick={() => setIsSearchOpen(false)} className="p-2 hover:bg-cream-100 rounded-lg transition-colors">
-            <X className="w-5 h-5 text-maroon-400" />
+          <button onClick={() => setIsSearchOpen(false)} className="p-2 hover:bg-neutral-100 rounded-lg transition-colors">
+            <X className="w-5 h-5 text-primary-400" />
           </button>
         </div>
 
@@ -57,21 +57,21 @@ export default function SearchModal() {
         <div className="max-h-[60vh] overflow-y-auto">
           {searchQuery && searchResults.length === 0 && (
             <div className="p-8 text-center">
-              <p className="text-maroon-500">&ldquo;{searchQuery}&rdquo; ke liye koi result nahi mila 😔</p>
-              <p className="text-sm mt-2 text-maroon-400">Venue naam, area, ya suholiyaat search karein</p>
+              <p className="text-primary-500">No results found for &ldquo;{searchQuery}&rdquo;</p>
+              <p className="text-sm mt-2 text-primary-400 font-light">Try searching by venue name, area, or amenities</p>
             </div>
           )}
 
           {searchResults.length > 0 && (
             <div className="p-4">
-              <p className="text-sm text-maroon-400 mb-3">🏛️ {searchResults.length} venues milein</p>
+              <p className="text-sm text-primary-400 mb-3 font-light">{searchResults.length} venues found</p>
               <div className="space-y-1">
                 {searchResults.map((venue) => (
                   <Link
                     key={venue.id}
                     href={`/marquees/${venue.slug}`}
                     onClick={() => setIsSearchOpen(false)}
-                    className="flex items-center gap-4 p-3 rounded-xl hover:bg-cream-50 transition-colors group"
+                    className="flex items-center gap-4 p-3 rounded-xl hover:bg-neutral-50 transition-colors group"
                   >
                     <img
                       src={venue.image}
@@ -79,17 +79,17 @@ export default function SearchModal() {
                       className="w-16 h-16 object-cover rounded-xl"
                     />
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-serif font-semibold text-maroon-800 truncate group-hover:text-mehndi-600 transition-colors">{venue.name}</h3>
-                      <p className="text-sm text-maroon-400 truncate">{venue.location}</p>
+                      <h3 className="font-serif font-semibold text-primary-900 truncate group-hover:text-accent-700 transition-colors">{venue.name}</h3>
+                      <p className="text-sm text-primary-400 truncate font-light">{venue.location}</p>
                       <div className="flex items-center gap-2 mt-1">
-                        <span className="text-xs px-2 py-0.5 bg-cream-100 text-maroon-600 rounded-full">{venue.area}</span>
-                        <span className="text-xs text-maroon-400">from {formatPrice(venue.pricing.perHead.min)}/head</span>
+                        <span className="text-xs px-2 py-0.5 bg-neutral-100 text-primary-600 rounded-full">{venue.area}</span>
+                        <span className="text-xs text-primary-400 font-light">from {formatPrice(venue.pricing.perHead.min)}/head</span>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="flex items-center text-mehndi-500">
+                      <div className="flex items-center text-accent-500">
                         <Star className="w-4 h-4 mr-1 fill-current" />
-                        <span className="font-semibold text-maroon-700">{venue.rating}</span>
+                        <span className="font-semibold text-primary-700">{venue.rating}</span>
                       </div>
                     </div>
                   </Link>
@@ -100,13 +100,13 @@ export default function SearchModal() {
 
           {!searchQuery && (
             <div className="p-6">
-              <p className="text-sm text-maroon-400 mb-4">⚡ Jaldi Dhoondhein</p>
+              <p className="text-[11px] text-primary-400 mb-4 uppercase tracking-[0.2em] font-medium">Quick Search</p>
               <div className="flex flex-wrap gap-2">
                 {['Royal Palm', 'PC Marquee', 'DHA', 'Gulberg', 'Mall Road', '5-Star', 'Lawn', 'Budget Friendly'].map((term) => (
                   <button
                     key={term}
                     onClick={() => performSearch(term)}
-                    className="px-4 py-2 bg-cream-100 hover:bg-mehndi-50 hover:text-mehndi-700 text-maroon-600 rounded-full text-sm transition-colors"
+                    className="px-4 py-2 bg-neutral-100 hover:bg-accent-50 hover:text-accent-700 text-primary-600 rounded-full text-sm transition-colors font-light"
                   >
                     {term}
                   </button>
@@ -117,9 +117,9 @@ export default function SearchModal() {
         </div>
 
         {/* Footer */}
-        <div className="border-t border-mehndi-200 px-4 py-3 bg-cream-50 flex items-center justify-between text-xs text-maroon-400">
-          <span>Press <kbd className="px-2 py-1 bg-cream-200 rounded text-maroon-600">Esc</kbd> to close</span>
-          <span><kbd className="px-2 py-1 bg-cream-200 rounded text-maroon-600">Ctrl</kbd> + <kbd className="px-2 py-1 bg-cream-200 rounded text-maroon-600">K</kbd> to search</span>
+        <div className="border-t border-neutral-200 px-4 py-3 bg-neutral-50 flex items-center justify-between text-xs text-primary-400">
+          <span className="font-light">Press <kbd className="px-2 py-1 bg-white rounded border border-neutral-200 text-primary-600 font-medium">Esc</kbd> to close</span>
+          <span className="font-light"><kbd className="px-2 py-1 bg-white rounded border border-neutral-200 text-primary-600 font-medium">Ctrl</kbd> + <kbd className="px-2 py-1 bg-white rounded border border-neutral-200 text-primary-600 font-medium">K</kbd> to search</span>
         </div>
       </div>
     </div>

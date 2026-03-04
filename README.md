@@ -37,6 +37,32 @@ A premium wedding planner web application for Lahore's top marquees. Built with 
 4. **Open in browser:**
    Visit [http://localhost:3000](http://localhost:3000)
 
+## AI Assistant Backend (OpenAI / Gemini)
+
+The assistant now uses a secure server-side API route at `pages/api/assistant-chat.js`.
+API keys are read on the server only and are never exposed to the browser.
+
+### Setup
+
+1. Copy `.env.example` to `.env.local`.
+2. Configure one provider:
+
+```bash
+# OpenAI
+LLM_PROVIDER=openai
+OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_MODEL=gpt-4o-mini
+
+# OR Gemini
+LLM_PROVIDER=gemini
+GEMINI_API_KEY=your_gemini_api_key_here
+GEMINI_MODEL=gemini-1.5-flash
+```
+
+3. Restart the dev server after editing environment variables.
+
+If no key is configured, the assistant returns a configuration error message from the backend.
+
 ## Project Structure
 
 ```

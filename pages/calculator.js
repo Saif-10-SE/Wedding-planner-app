@@ -51,7 +51,7 @@ function AnimatedPrice({ value, className = '' }) {
 // PIE CHART COMPONENT
 // ============================================================
 function BudgetPieChart({ data, total }) {
-  const colors = ['#c9a84c', '#6b0f18', '#eab308', '#db2777', '#059669', '#a07c2a', '#ec4899', '#34d399'];
+  const colors = ['#dda027', '#45091a', '#064e3b', '#4f46e5', '#7a1a37', '#c9a84c', '#0d9488', '#6b0f18'];
   let cumulative = 0;
   const segments = data.filter(d => d.value > 0).map((item, i) => {
     const pct = (item.value / total) * 100;
@@ -72,8 +72,8 @@ function BudgetPieChart({ data, total }) {
       >
         <div className="absolute inset-[25%] rounded-full bg-shaadi-card flex items-center justify-center">
           <div className="text-center">
-            <p className="text-[9px] text-maroon-600 uppercase tracking-widest">Total</p>
-            <p className="text-sm font-bold text-maroon-900">{formatPrice(total)}</p>
+            <p className="text-[9px] text-primary-600 uppercase tracking-widest">Total</p>
+            <p className="text-sm font-bold text-primary-900">{formatPrice(total)}</p>
           </div>
         </div>
       </div>
@@ -81,8 +81,8 @@ function BudgetPieChart({ data, total }) {
         {segments.map((s, i) => (
           <div key={i} className="flex items-center gap-1.5 text-xs">
             <div className="w-2.5 h-2.5 rounded-sm flex-shrink-0" style={{ background: s.color }}></div>
-            <span className="text-maroon-700 truncate">{s.label}</span>
-            <span className="text-maroon-400 ml-auto">{Math.round(s.pct)}%</span>
+            <span className="text-primary-700 truncate">{s.label}</span>
+            <span className="text-primary-400 ml-auto">{Math.round(s.pct)}%</span>
           </div>
         ))}
       </div>
@@ -95,7 +95,7 @@ function BudgetPieChart({ data, total }) {
 // ============================================================
 function Confetti({ show }) {
   if (!show) return null;
-  const colors = ['#c9a84c', '#eab308', '#6b0f18', '#db2777', '#059669', '#ec4899', '#fde68a', '#ad1825'];
+  const colors = ['#dda027', '#e6b43e', '#45091a', '#7a1a37', '#064e3b', '#4f46e5', '#fde68a', '#0d9488'];
   return (
     <div className="fixed inset-0 pointer-events-none z-50">
       {Array.from({ length: 50 }).map((_, i) => (
@@ -128,8 +128,8 @@ export default function CalculatorPage() {
   const [guestCount, setGuestCount] = useState(500);
 
   // Multi-event system
-  const [selectedEvents, setSelectedEvents] = useState(['mehndi', 'barat', 'valima']);
-  const [activeEvent, setActiveEvent] = useState('barat');
+  const [selectedEvents, setSelectedEvents] = useState([]);
+  const [activeEvent, setActiveEvent] = useState(null);
   const [includeHallRental, setIncludeHallRental] = useState(true);
 
   // Per-event menu state: { eventId: { categoryId: [dishId, ...] } }
@@ -144,7 +144,7 @@ export default function CalculatorPage() {
   const [activeMenuTab, setActiveMenuTab] = useState('starters');
 
   // Other services (shared across events)
-  const [selectedDecorPackage, setSelectedDecorPackage] = useState(0);
+  const [selectedDecorPackage, setSelectedDecorPackage] = useState(null);
   const [selectedPhotoPackage, setSelectedPhotoPackage] = useState(0);
   const [selectedEntertainment, setSelectedEntertainment] = useState(0);
   const [selectedTransport, setSelectedTransport] = useState(0);
@@ -166,12 +166,12 @@ export default function CalculatorPage() {
   }, [venueSlug]);
 
   const currentVenue = useMemo(() => {
-    return marquees.find(m => m.slug === selectedVenue) || marquees[0];
+    return marquees.find(m => m.slug === selectedVenue) || null;
   }, [selectedVenue]);
 
   const category = currentVenue?.category || 'B';
 
-  // Initialize event menus when events change
+  // Initialize event menus when events change (start empty, user builds gradually)
   useEffect(() => {
     const newMenus = { ...eventMenus };
     const newCounters = { ...eventCounters };
@@ -181,17 +181,12 @@ export default function CalculatorPage() {
 
     selectedEvents.forEach(eventId => {
       if (!newMenus[eventId]) {
-        const preset = eventMenuPresets[eventId];
-        newMenus[eventId] = preset ? { ...preset.categories } : {};
-        newCounters[eventId] = preset ? [...preset.suggestedCounters] : [];
+        newMenus[eventId] = {};
+        newCounters[eventId] = [];
         const eventInfo = eventTypes[eventId];
         const guests = Math.round(guestCount * (eventInfo?.suggestedGuestRatio || 1));
         newGuests[eventId] = guests;
-        // Initialize starter quantities from preset
-        const presetStarters = preset?.categories?.starters || [];
-        if (presetStarters.length > 0) {
-          newStarterQty[eventId] = getDefaultStarterQuantities(presetStarters, guests);
-        }
+        newStarterQty[eventId] = {};
         changed = true;
       }
     });
@@ -227,17 +222,19 @@ export default function CalculatorPage() {
   const toggleEvent = useCallback((eventId) => {
     setSelectedEvents(prev => {
       if (prev.includes(eventId)) {
-        if (prev.length <= 1) return prev; // minimum 1 event
         const next = prev.filter(e => e !== eventId);
-        if (activeEvent === eventId) setActiveEvent(next[0]);
+        if (activeEvent === eventId) setActiveEvent(next[0] || null);
         return next;
       }
-      return [...prev, eventId];
+      const next = [...prev, eventId];
+      if (!activeEvent) setActiveEvent(eventId);
+      return next;
     });
   }, [activeEvent]);
 
   // Toggle dish for current event
   const toggleDish = useCallback((categoryId, dishId) => {
+    if (!activeEvent) return;
     setEventMenus(prev => {
       const eventMenu = prev[activeEvent] || {};
       const current = eventMenu[categoryId] || [];
@@ -269,6 +266,7 @@ export default function CalculatorPage() {
 
   // Update starter quantity for current event
   const updateStarterQty = useCallback((dishId, qty) => {
+    if (!activeEvent) return;
     const val = Math.max(0, parseInt(qty) || 0);
     setStarterQuantities(prev => ({
       ...prev,
@@ -278,6 +276,7 @@ export default function CalculatorPage() {
 
   // Toggle counter for current event
   const toggleCounter = useCallback((counterId) => {
+    if (!activeEvent) return;
     setEventCounters(prev => {
       const current = prev[activeEvent] || [];
       return {
@@ -291,6 +290,7 @@ export default function CalculatorPage() {
 
   // Apply preset to current event
   const applyPresetToEvent = useCallback((presetKey) => {
+    if (!activeEvent) return;
     const preset = presetKey === 'event-default'
       ? eventMenuPresets[activeEvent]
       : menuPresets[presetKey];
@@ -335,7 +335,7 @@ export default function CalculatorPage() {
   }, [currentEventMenu, category, activeEvent]);
 
   // ============================================================
-  // GRAND CALCULATIONS — Per event + combined
+  // GRAND CALCULATIONS - Per event + combined
   // ============================================================
   const perEventCalculations = useMemo(() => {
     const results = {};
@@ -446,27 +446,29 @@ export default function CalculatorPage() {
   return (
     <>
       <Head>
-        <title>Budget Calculator | Lahore Shaadi Planner</title>
+        <title>Budget Calculator | Wedify Planner</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Navbar />
       <Confetti show={showConfetti} />
 
-      {/* ========== HERO — Desi Festive ========== */}
-      <section className="pt-32 pb-16 relative overflow-hidden gradient-maroon sparkles-bg">
+      {/* ========== HERO - Desi Festive ========== */}
+      <section className="pt-32 pb-16 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #45091a 0%, #7a1a37 40%, #45091a 70%, #2a0510 100%)' }}>
+        <div className="absolute inset-0 texture-paisley opacity-[0.04]"></div>
         <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-mehndi-400 rounded-full filter blur-3xl translate-x-1/2 -translate-y-1/2"></div>
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-rani-500 rounded-full filter blur-3xl -translate-x-1/2 translate-y-1/2"></div>
+          <div className="absolute top-0 right-0 w-96 h-96 bg-accent-400 rounded-full filter blur-[120px] translate-x-1/3 -translate-y-1/3"></div>
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-wine-700 rounded-full filter blur-[120px] -translate-x-1/3 translate-y-1/3"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-accent-500/10 rounded-full blur-[100px]"></div>
         </div>
         <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 glass rounded-full text-mehndi-300 text-xs tracking-widest uppercase mb-6 border border-gold-500/20">
-            <Calculator className="w-3.5 h-3.5" /> شادی بجٹ پلانر
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/5 backdrop-blur-sm rounded-full text-accent-300 text-xs tracking-widest uppercase mb-6 border border-accent-500/20">
+            <Calculator className="w-3.5 h-3.5" /> Wedding Budget Planner
           </div>
           <h1 className="text-4xl md:text-6xl font-serif text-white mb-4">
             Wedding <span className="text-gradient">Budget Calculator</span>
           </h1>
           <p className="text-white/50 max-w-2xl mx-auto leading-relaxed">
-            Plan every event separately — Mehndi, Barat, Valima — with authentic Lahore dishes, real-time pricing, and smart budget suggestions.
+            Plan every event separately - Mehndi, Barat, Valima - with authentic Lahore dishes, real-time pricing, and smart budget suggestions.
           </p>
           <div className="flex flex-wrap justify-center gap-3 mt-8">
             {Object.values(eventTypes).map(evt => (
@@ -479,40 +481,41 @@ export default function CalculatorPage() {
       </section>
 
       {/* ========== CALCULATOR BODY ========== */}
-      <section className="py-12 bg-cream-100 min-h-screen">
+      <section className="py-12 min-h-screen" style={{ background: 'linear-gradient(180deg, #f8f6f2 0%, #f5f0e8 100%)' }}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid lg:grid-cols-3 gap-8">
-            {/* ====== LEFT COLUMN — Form ====== */}
+            {/* ====== LEFT COLUMN - Form ====== */}
             <div className="lg:col-span-2 space-y-6">
 
               {/* STEP 1: Venue */}
-              <StepCard number={1} title="Select Venue" icon={<Crown className="w-5 h-5 text-gold-500" />}>
+              <StepCard number={1} title="Select Venue" icon={<Crown className="w-5 h-5 text-accent-500" />}>
                 <select
                   value={selectedVenue}
                   onChange={(e) => setSelectedVenue(e.target.value)}
-                  className="w-full px-5 py-4 border-2 border-gold-300/40 rounded-xl focus:ring-2 focus:ring-gold-500 focus:border-gold-500 text-maroon-800 bg-cream-50 font-medium transition-all"
+                  className="w-full px-5 py-4 border-2 border-accent-300/40 rounded-xl focus:ring-2 focus:ring-accent-500 focus:border-accent-500 text-primary-800 bg-neutral-50 font-medium transition-all"
                 >
+                  <option value="">Select a venue first</option>
                   {marquees.map(m => (
                     <option key={m.slug} value={m.slug}>
-                      [{m.category}] {m.name} — {m.area} (from {formatPrice(m.pricing.perHead.min)}/head)
+                      [{m.category}] {m.name} - {m.area} (from {formatPrice(m.pricing.perHead.min)}/head)
                     </option>
                   ))}
                 </select>
                 {currentVenue && (
-                  <div className="mt-5 p-5 bg-cream-50 rounded-xl border border-gold-200/50">
+                  <div className="mt-5 p-5 bg-neutral-50 rounded-xl border border-accent-200/50">
                     <div className="flex items-start gap-5">
                       <img src={currentVenue.image} alt={currentVenue.name} className="w-28 h-28 object-cover rounded-xl shadow-sm" />
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-serif font-semibold text-maroon-900 text-lg">{currentVenue.name}</h3>
+                          <h3 className="font-serif font-semibold text-primary-900 text-lg">{currentVenue.name}</h3>
                           {catInfo && (
                             <span className={`text-[10px] px-2 py-0.5 rounded-full ${catInfo.badgeClass}`}>{catInfo.icon} {catInfo.label}</span>
                           )}
                         </div>
-                        <p className="text-sm text-maroon-500">{currentVenue.location}</p>
+                        <p className="text-sm text-primary-500">{currentVenue.location}</p>
                         <div className="flex gap-4 mt-2 text-sm">
-                          <span className="text-gold-700 font-medium"><Users className="w-3.5 h-3.5 inline mr-1" />{currentVenue.capacity.min}-{currentVenue.capacity.max}</span>
-                          <span className="text-mehndi-600">⭐ {currentVenue.rating}</span>
+                          <span className="text-accent-700 font-medium"><Users className="w-3.5 h-3.5 inline mr-1" />{currentVenue.capacity.min}-{currentVenue.capacity.max}</span>
+                          <span className="text-accent-600">â­ {currentVenue.rating}</span>
                         </div>
                       </div>
                     </div>
@@ -521,8 +524,8 @@ export default function CalculatorPage() {
               </StepCard>
 
               {/* STEP 2: Events Selection + Guest Count */}
-              <StepCard number={2} title="Select Events & Guests" icon={<PartyPopper className="w-5 h-5 text-rani-500" />}>
-                <p className="text-sm text-maroon-500 mb-4">Choose which events to plan — each gets its own menu & budget</p>
+              <StepCard number={2} title="Select Events & Guests" icon={<PartyPopper className="w-5 h-5 text-rose-500" />}>
+                <p className="text-sm text-primary-500 mb-4">Choose which events to plan - each gets its own menu & budget</p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-8">
                   {Object.values(eventTypes).map(evt => {
                     const isActive = selectedEvents.includes(evt.id);
@@ -533,11 +536,11 @@ export default function CalculatorPage() {
                         className={`relative p-4 rounded-xl border-2 text-center transition-all duration-300 group ${
                           isActive
                             ? `border-${evt.color}-400 bg-${evt.color}-50 shadow-sm`
-                            : 'border-cream-300 bg-white hover:border-gold-300'
+                            : 'border-neutral-300 bg-white hover:border-accent-300'
                         }`}
                       >
                         <span className="text-2xl block mb-1">{evt.icon}</span>
-                        <span className={`text-xs font-semibold ${isActive ? `text-${evt.color}-700` : 'text-maroon-500'}`}>{evt.name}</span>
+                        <span className={`text-xs font-semibold ${isActive ? `text-${evt.color}-700` : 'text-primary-500'}`}>{evt.name}</span>
                         {isActive && (
                           <div className={`absolute -top-1.5 -right-1.5 w-5 h-5 ${evt.badgeBg} rounded-full flex items-center justify-center`}>
                             <Check className="w-3 h-3 text-white" />
@@ -551,7 +554,7 @@ export default function CalculatorPage() {
                 {/* Master guest count */}
                 <div className="mb-6">
                   <div className="flex items-center justify-between mb-3">
-                    <label className="text-sm font-medium text-maroon-700">Base Guest Count</label>
+                    <label className="text-sm font-medium text-primary-700">Base Guest Count</label>
                     <span className="text-3xl font-serif font-bold text-gradient">{guestCount}</span>
                   </div>
                   <input
@@ -560,14 +563,14 @@ export default function CalculatorPage() {
                     onChange={(e) => setGuestCount(parseInt(e.target.value))}
                     className="w-full h-2 rounded-full appearance-none cursor-pointer"
                   />
-                  <div className="flex justify-between text-xs text-maroon-400 mt-2">
+                  <div className="flex justify-between text-xs text-primary-400 mt-2">
                     <span>100</span><span>1000</span><span>2000</span><span>3000</span><span>4000</span>
                   </div>
                 </div>
 
                 {/* Per-event guest adjustment */}
-                <div className="bg-cream-50 rounded-xl p-4 border border-gold-200/30">
-                  <p className="text-xs text-maroon-500 mb-3 font-medium">
+                <div className="bg-neutral-50 rounded-xl p-4 border border-accent-200/30">
+                  <p className="text-xs text-primary-500 mb-3 font-medium">
                     <Info className="w-3 h-3 inline mr-1" />
                     Guests auto-adjust per event type (editable below)
                   </p>
@@ -577,12 +580,12 @@ export default function CalculatorPage() {
                       return (
                         <div key={eventId} className={`flex items-center gap-2 p-2 rounded-lg border ${evt.borderColor} bg-white`}>
                           <span className="text-sm">{evt.icon}</span>
-                          <span className="text-xs text-maroon-600 font-medium flex-1">{evt.name}</span>
+                          <span className="text-xs text-primary-600 font-medium flex-1">{evt.name}</span>
                           <input
                             type="number" min="50" max="4000" step="50"
                             value={eventGuests[eventId] || guestCount}
                             onChange={(e) => setEventGuests(prev => ({ ...prev, [eventId]: parseInt(e.target.value) || guestCount }))}
-                            className="w-20 px-2 py-1 text-sm border border-gold-200 rounded-lg text-center bg-cream-50 font-semibold text-maroon-800"
+                            className="w-20 px-2 py-1 text-sm border border-accent-200 rounded-lg text-center bg-neutral-50 font-semibold text-primary-800"
                           />
                         </div>
                       );
@@ -592,10 +595,10 @@ export default function CalculatorPage() {
 
                 <label className="flex items-center cursor-pointer group mt-5">
                   <input type="checkbox" checked={includeHallRental} onChange={(e) => setIncludeHallRental(e.target.checked)}
-                    className="w-5 h-5 text-gold-500 rounded border-maroon-300 focus:ring-gold-500"
+                    className="w-5 h-5 text-accent-500 rounded border-primary-300 focus:ring-accent-500"
                   />
-                  <span className="ml-3 text-maroon-700 group-hover:text-maroon-900 transition-colors text-sm">
-                    Include Hall Rental <span className="text-gold-600 font-medium">({formatPrice(currentVenue?.pricing?.hallRental || 0)} per event)</span>
+                  <span className="ml-3 text-primary-700 group-hover:text-primary-900 transition-colors text-sm">
+                    Include Hall Rental <span className="text-accent-600 font-medium">({formatPrice(currentVenue?.pricing?.hallRental || 0)} per event)</span>
                   </span>
                 </label>
               </StepCard>
@@ -603,15 +606,15 @@ export default function CalculatorPage() {
               {/* ============================================================
                   STEP 3: MULTI-EVENT MENU BUILDER
                   ============================================================ */}
-              <div className="bg-shaadi-card rounded-2xl shadow-festive border border-gold-200/30 overflow-hidden">
+              <div className="bg-shaadi-card rounded-2xl shadow-festive border border-accent-200/30 overflow-hidden">
                 <div className="p-8 pb-0">
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="w-9 h-9 bg-gradient-to-br from-gold-500 to-mehndi-600 text-maroon-950 rounded-xl flex items-center justify-center text-sm font-bold shadow-gold">3</span>
-                    <Utensils className="w-5 h-5 text-gold-500" />
-                    <h2 className="text-xl font-serif text-maroon-900">Build Menu Per Event</h2>
+                    <span className="w-9 h-9 bg-gradient-to-br from-accent-500 to-accent-600 text-primary-950 rounded-xl flex items-center justify-center text-sm font-bold shadow-gold">3</span>
+                    <Utensils className="w-5 h-5 text-accent-500" />
+                    <h2 className="text-xl font-serif text-primary-900">Build Menu Per Event</h2>
                   </div>
-                  <p className="text-sm text-maroon-400 ml-12 mb-4">
-                    Each event has its own menu — switch tabs to customize
+                  <p className="text-sm text-primary-400 ml-12 mb-4">
+                    Each event has its own menu - switch tabs to customize
                   </p>
 
                   {/* Event switcher tabs */}
@@ -648,12 +651,12 @@ export default function CalculatorPage() {
                       <div className="flex items-center justify-between">
                         <div>
                           <p className={`text-xs ${currentEventInfo.textColor} font-semibold uppercase tracking-wider`}>
-                            {currentEventInfo.icon} {currentEventInfo.name} Menu — {currentEventInfo.urdu}
+                            {currentEventInfo.icon} {currentEventInfo.name} Menu - {currentEventInfo.urdu}
                           </p>
-                          <p className="text-xs text-maroon-400 mt-0.5">{currentEventInfo.menuStyle}</p>
+                          <p className="text-xs text-primary-400 mt-0.5">{currentEventInfo.menuStyle}</p>
                         </div>
                         <div className="text-right">
-                          <p className="text-xs text-maroon-400">Per Head</p>
+                          <p className="text-xs text-primary-400">Per Head</p>
                           <AnimatedPrice value={currentEventPerHead} className="text-lg font-bold text-gradient" />
                         </div>
                       </div>
@@ -661,15 +664,15 @@ export default function CalculatorPage() {
                   )}
 
                   {/* Menu Per-Head Ticker */}
-                  <div className="ml-12 mb-6 gradient-maroon rounded-xl p-4 flex items-center justify-between relative overflow-hidden">
+                  <div className="ml-12 mb-6 bg-primary-950 rounded-xl p-4 flex items-center justify-between relative overflow-hidden">
                     <div className="absolute inset-0 sparkles-bg opacity-30"></div>
                     <div className="relative z-10">
-                      <p className="text-xs text-white/40 tracking-widest uppercase">{currentEventInfo?.name} — Per Head</p>
+                      <p className="text-xs text-white/40 tracking-widest uppercase">{currentEventInfo?.name} - Per Head</p>
                       <AnimatedPrice value={currentEventPerHead} className="text-2xl font-bold text-gradient mt-0.5" />
                     </div>
                     <div className="relative z-10 text-right">
-                      <p className="text-xs text-white/40">{currentEventDishCount} dishes · {currentEventCounters.length} counters</p>
-                      <p className="text-sm text-mehndi-300 font-medium mt-0.5">
+                      <p className="text-xs text-white/40">{currentEventDishCount} dishes Â· {currentEventCounters.length} counters</p>
+                      <p className="text-sm text-accent-300 font-medium mt-0.5">
                         {formatPrice(currentEventPerHead * currentEventGuests)} total
                       </p>
                     </div>
@@ -677,7 +680,7 @@ export default function CalculatorPage() {
 
                   {/* Quick Presets */}
                   <div className="ml-12 mb-6">
-                    <p className="text-xs text-maroon-400 mb-2 tracking-wide uppercase">Quick Presets</p>
+                    <p className="text-xs text-primary-400 mb-2 tracking-wide uppercase">Quick Presets</p>
                     <div className="flex flex-wrap gap-2">
                       <button onClick={() => applyPresetToEvent('event-default')}
                         className={`px-4 py-2 ${currentEventInfo?.bgColor} border ${currentEventInfo?.borderColor} rounded-lg text-sm ${currentEventInfo?.textColor} transition-all hover:shadow-sm`}
@@ -687,9 +690,9 @@ export default function CalculatorPage() {
                       </button>
                       {Object.entries(menuPresets).map(([key, preset]) => (
                         <button key={key} onClick={() => applyPresetToEvent(key)}
-                          className="px-4 py-2 bg-cream-100 hover:bg-gold-50 border border-cream-300 hover:border-gold-300 rounded-lg text-sm text-maroon-600 hover:text-gold-700 transition-all"
+                          className="px-4 py-2 bg-neutral-100 hover:bg-accent-50 border border-neutral-300 hover:border-accent-300 rounded-lg text-sm text-primary-600 hover:text-accent-700 transition-all"
                         >
-                          {preset.name} <span className="text-maroon-400 text-xs">({preset.targetDishes})</span>
+                          {preset.name} <span className="text-primary-400 text-xs">({preset.targetDishes})</span>
                         </button>
                       ))}
                       <button onClick={() => setEventMenus(prev => ({ ...prev, [activeEvent]: {} }))}
@@ -702,44 +705,50 @@ export default function CalculatorPage() {
                 </div>
 
                 {/* Category Tabs */}
-                <div className="border-t border-cream-200 bg-cream-50/50">
-                  <div className="flex overflow-x-auto hide-scrollbar px-4 pt-3">
-                    {menuCategories.map(cat => {
-                      const count = (currentEventMenu[cat.id] || []).length;
-                      return (
-                        <button
-                          key={cat.id}
-                          onClick={() => setActiveMenuTab(cat.id)}
-                          className={`whitespace-nowrap px-4 py-3 text-sm font-medium rounded-t-xl transition-all flex items-center gap-1.5 border-b-2 ${
-                            activeMenuTab === cat.id
-                              ? 'bg-white border-gold-500 text-maroon-800 shadow-sm'
-                              : 'border-transparent text-maroon-400 hover:text-maroon-600 hover:bg-white/50'
-                          }`}
-                        >
-                          <span>{cat.icon}</span>
-                          <span className="hidden sm:inline">{cat.name}</span>
-                          {count > 0 && (
-                            <span className="ml-1 w-5 h-5 bg-gold-500 text-maroon-950 text-[10px] font-bold rounded-full flex items-center justify-center">{count}</span>
-                          )}
-                        </button>
-                      );
-                    })}
+                {selectedEvents.length > 0 && (
+                  <div className="border-t border-neutral-200 bg-neutral-50/50">
+                    <div className="flex overflow-x-auto hide-scrollbar px-4 pt-3">
+                      {menuCategories.map(cat => {
+                        const count = (currentEventMenu[cat.id] || []).length;
+                        return (
+                          <button
+                            key={cat.id}
+                            onClick={() => setActiveMenuTab(cat.id)}
+                            className={`whitespace-nowrap px-4 py-3 text-sm font-medium rounded-t-xl transition-all flex items-center gap-1.5 border-b-2 ${
+                              activeMenuTab === cat.id
+                                ? 'bg-white border-accent-500 text-primary-800 shadow-sm'
+                                : 'border-transparent text-primary-400 hover:text-primary-600 hover:bg-white/50'
+                            }`}
+                          >
+                            <span>{cat.icon}</span>
+                            <span className="hidden sm:inline">{cat.name}</span>
+                            {count > 0 && (
+                              <span className="ml-1 w-5 h-5 bg-accent-500 text-primary-950 text-[10px] font-bold rounded-full flex items-center justify-center">{count}</span>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Dish Grid */}
                 <div className="p-6 bg-shaadi-card">
-                  {menuCategories.filter(cat => cat.id === activeMenuTab).map(cat => {
+                  {selectedEvents.length === 0 ? (
+                    <div className="p-6 rounded-xl border border-neutral-200 bg-neutral-50 text-center text-primary-500 text-sm">
+                      Select at least one event to start building menu items.
+                    </div>
+                  ) : menuCategories.filter(cat => cat.id === activeMenuTab).map(cat => {
                     const selected = currentEventMenu[cat.id] || [];
                     const atMax = selected.length >= cat.maxSelect;
                     return (
                       <div key={cat.id}>
                         <div className="flex items-center justify-between mb-4">
                           <div>
-                            <h3 className="font-serif font-semibold text-maroon-800">{cat.icon} {cat.name}</h3>
-                            <p className="text-xs text-maroon-400 mt-0.5">{cat.description}</p>
+                            <h3 className="font-serif font-semibold text-primary-800">{cat.icon} {cat.name}</h3>
+                            <p className="text-xs text-primary-400 mt-0.5">{cat.description}</p>
                           </div>
-                          <span className={`text-sm font-medium ${atMax ? 'text-royal-500' : 'text-maroon-500'}`}>
+                          <span className={`text-sm font-medium ${atMax ? 'text-royal-500' : 'text-primary-500'}`}>
                             {selected.length}/{cat.maxSelect}
                           </span>
                         </div>
@@ -756,10 +765,10 @@ export default function CalculatorPage() {
                                 key={dish.id}
                                 className={`relative text-left rounded-xl border-2 transition-all duration-300 group ${
                                   isSelected
-                                    ? 'border-gold-400 bg-gold-50/50 shadow-sm'
+                                    ? 'border-accent-400 bg-accent-50/50 shadow-sm'
                                     : disabled
-                                      ? 'border-cream-200 bg-cream-50 opacity-50 cursor-not-allowed'
-                                      : 'border-cream-200 hover:border-gold-300 bg-white hover:bg-cream-50'
+                                      ? 'border-neutral-200 bg-neutral-50 opacity-50 cursor-not-allowed'
+                                      : 'border-neutral-200 hover:border-accent-300 bg-white hover:bg-neutral-50'
                                 }`}
                               >
                                 <button
@@ -770,21 +779,21 @@ export default function CalculatorPage() {
                                   <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3 flex-1 min-w-0">
                                       <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 transition-all ${
-                                        isSelected ? 'bg-gold-500 border-gold-500' : 'border-maroon-300 group-hover:border-gold-400'
+                                        isSelected ? 'bg-accent-500 border-accent-500' : 'border-primary-300 group-hover:border-accent-400'
                                       }`}>
                                         {isSelected && <Check className="w-3 h-3 text-white" />}
                                       </div>
-                                      <p className="font-medium text-maroon-800 text-sm truncate">
+                                      <p className="font-medium text-primary-800 text-sm truncate">
                                         {dish.name}
-                                        {dish.popular && <Star className="w-3 h-3 text-mehndi-500 fill-mehndi-500 inline ml-1.5" />}
+                                        {dish.popular && <Star className="w-3 h-3 text-accent-500 fill-accent-500 inline ml-1.5" />}
                                       </p>
                                     </div>
                                     <div className="text-right ml-2 flex-shrink-0">
-                                      <span className={`text-sm font-bold whitespace-nowrap ${isSelected ? 'text-gold-600' : 'text-maroon-500'}`}>
+                                      <span className={`text-sm font-bold whitespace-nowrap ${isSelected ? 'text-accent-600' : 'text-primary-500'}`}>
                                         {formatPrice(price)}
                                       </span>
                                       {dish.unit && (
-                                        <span className="block text-[10px] text-maroon-400 whitespace-nowrap">{dish.unit}</span>
+                                        <span className="block text-[10px] text-primary-400 whitespace-nowrap">{dish.unit}</span>
                                       )}
                                     </div>
                                   </div>
@@ -792,12 +801,12 @@ export default function CalculatorPage() {
                                 {/* Quantity controls for starters */}
                                 {isStarter && isSelected && (
                                   <div className="px-4 pb-3 pt-0" onClick={e => e.stopPropagation()}>
-                                    <div className="flex items-center justify-between gap-2 bg-cream-100 rounded-lg px-3 py-2 border border-gold-200/50">
-                                      <span className="text-[11px] text-maroon-500 font-medium">Qty ({dish.unit || 'units'}):</span>
+                                    <div className="flex items-center justify-between gap-2 bg-neutral-100 rounded-lg px-3 py-2 border border-accent-200/50">
+                                      <span className="text-[11px] text-primary-500 font-medium">Qty ({dish.unit || 'units'}):</span>
                                       <div className="flex items-center gap-1.5">
                                         <button
                                           onClick={(e) => { e.stopPropagation(); updateStarterQty(dish.id, currentQty - (dish.unit === 'per kg' ? 1 : 50)); }}
-                                          className="w-7 h-7 rounded-md bg-white border border-cream-300 hover:border-gold-400 flex items-center justify-center text-maroon-600 hover:text-gold-600 transition-colors"
+                                          className="w-7 h-7 rounded-md bg-white border border-neutral-300 hover:border-accent-400 flex items-center justify-center text-primary-600 hover:text-accent-600 transition-colors"
                                         >
                                           <Minus className="w-3 h-3" />
                                         </button>
@@ -807,16 +816,16 @@ export default function CalculatorPage() {
                                           value={currentQty}
                                           onChange={(e) => updateStarterQty(dish.id, e.target.value)}
                                           onClick={(e) => e.stopPropagation()}
-                                          className="w-16 text-center text-sm font-bold text-maroon-800 bg-white border border-cream-300 rounded-md py-1 focus:ring-1 focus:ring-gold-500 focus:border-gold-500"
+                                          className="w-16 text-center text-sm font-bold text-primary-800 bg-white border border-neutral-300 rounded-md py-1 focus:ring-1 focus:ring-accent-500 focus:border-accent-500"
                                         />
                                         <button
                                           onClick={(e) => { e.stopPropagation(); updateStarterQty(dish.id, currentQty + (dish.unit === 'per kg' ? 1 : 50)); }}
-                                          className="w-7 h-7 rounded-md bg-white border border-cream-300 hover:border-gold-400 flex items-center justify-center text-maroon-600 hover:text-gold-600 transition-colors"
+                                          className="w-7 h-7 rounded-md bg-white border border-neutral-300 hover:border-accent-400 flex items-center justify-center text-primary-600 hover:text-accent-600 transition-colors"
                                         >
                                           <Plus className="w-3 h-3" />
                                         </button>
                                       </div>
-                                      <span className="text-[11px] font-semibold text-gold-600 whitespace-nowrap">= {formatPrice(totalDishCost)}</span>
+                                      <span className="text-[11px] font-semibold text-accent-600 whitespace-nowrap">= {formatPrice(totalDishCost)}</span>
                                     </div>
                                   </div>
                                 )}
@@ -831,7 +840,12 @@ export default function CalculatorPage() {
               </div>
 
               {/* STEP 4: Live Counters for Current Event */}
-              <StepCard number={4} title={`Live Counters — ${currentEventInfo?.name || ''}`} icon={<Flame className="w-5 h-5 text-orange-500" />} subtitle="Add live food stations for this event">
+              <StepCard number={4} title={`Live Counters - ${currentEventInfo?.name || ''}`} icon={<Flame className="w-5 h-5 text-orange-500" />} subtitle="Add live food stations for this event">
+                {selectedEvents.length === 0 ? (
+                  <div className="p-4 rounded-xl border border-neutral-200 bg-neutral-50 text-center text-primary-500 text-sm">
+                    Select an event first to enable live counters.
+                  </div>
+                ) : (
                 <div className="grid sm:grid-cols-2 gap-4">
                   {liveCounters.map(counter => {
                     const isSelected = currentEventCounters.includes(counter.id);
@@ -842,50 +856,51 @@ export default function CalculatorPage() {
                         onClick={() => toggleCounter(counter.id)}
                         className={`text-left p-5 rounded-xl border-2 transition-all duration-300 ${
                           isSelected
-                            ? 'border-gold-400 bg-gold-50/50 shadow-sm'
-                            : 'border-cream-200 hover:border-gold-300 bg-white'
+                            ? 'border-accent-400 bg-accent-50/50 shadow-sm'
+                            : 'border-neutral-200 hover:border-accent-300 bg-white'
                         }`}
                       >
                         <div className="flex items-start justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <span className="text-xl">{counter.icon}</span>
-                            <h4 className="font-semibold text-maroon-800 text-sm">{counter.name}</h4>
+                            <h4 className="font-semibold text-primary-800 text-sm">{counter.name}</h4>
                           </div>
                           <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 ${
-                            isSelected ? 'bg-gold-500 border-gold-500' : 'border-maroon-300'
+                            isSelected ? 'bg-accent-500 border-accent-500' : 'border-primary-300'
                           }`}>
                             {isSelected && <Check className="w-3 h-3 text-white" />}
                           </div>
                         </div>
-                        <p className="text-xs text-maroon-400 mb-2">{counter.description}</p>
-                        <p className="text-sm font-bold text-gold-600">{formatPrice(price)} <span className="text-maroon-400 font-normal text-xs">/ event</span></p>
+                        <p className="text-xs text-primary-400 mb-2">{counter.description}</p>
+                        <p className="text-sm font-bold text-accent-600">{formatPrice(price)} <span className="text-primary-400 font-normal text-xs">/ event</span></p>
                       </button>
                     );
                   })}
                 </div>
+                )}
               </StepCard>
 
               {/* STEP 5: Decor Package */}
-              <StepCard number={5} title="Decor Package" icon={<Palette className="w-5 h-5 text-rani-600" />}>
+              <StepCard number={5} title="Decor Package" icon={<Palette className="w-5 h-5 text-rose-600" />}>
                 <div className="space-y-3">
-                  {currentVenue?.decorPackages.map((pkg, index) => (
+                  {currentVenue?.decorPackages?.map((pkg, index) => (
                     <div key={index} onClick={() => setSelectedDecorPackage(index)}
                       className={`cursor-pointer border-2 rounded-xl p-5 transition-all duration-300 ${
                         selectedDecorPackage === index
-                          ? 'border-rani-400 bg-rani-50 shadow-sm'
-                          : 'border-cream-200 hover:border-rani-300 bg-white'
+                          ? 'border-rose-400 bg-rose-50 shadow-sm'
+                          : 'border-neutral-200 hover:border-rose-300 bg-white'
                       }`}
                     >
                       <div className="flex justify-between items-center">
                         <div>
-                          <h3 className="font-semibold text-maroon-800">{pkg.name} Package</h3>
+                          <h3 className="font-semibold text-primary-800">{pkg.name} Package</h3>
                           <div className="flex flex-wrap gap-1.5 mt-2">
                             {pkg.includes.slice(0, 4).map((item, i) => (
-                              <span key={i} className="text-xs px-2.5 py-1 bg-cream-100 rounded-full text-maroon-500 border border-cream-300">{item}</span>
+                              <span key={i} className="text-xs px-2.5 py-1 bg-neutral-100 rounded-full text-primary-500 border border-neutral-300">{item}</span>
                             ))}
                           </div>
                         </div>
-                        <span className="text-xl font-bold text-rani-600 ml-4 whitespace-nowrap">{formatPrice(pkg.price)}</span>
+                        <span className="text-xl font-bold text-rose-600 ml-4 whitespace-nowrap">{formatPrice(pkg.price)}</span>
                       </div>
                     </div>
                   ))}
@@ -893,18 +908,18 @@ export default function CalculatorPage() {
               </StepCard>
 
               {/* STEP 6: Additional Services */}
-              <StepCard number={6} title="Additional Services" icon={<Sparkles className="w-5 h-5 text-gold-500" />} subtitle="Select 'None' if not required — it removes the cost from your budget">
+              <StepCard number={6} title="Additional Services" icon={<Sparkles className="w-5 h-5 text-accent-500" />} subtitle="Select 'None' if not required - it removes the cost from your budget">
                 {[
-                  { key: 'photography', label: '📸 Photography & Videography', state: selectedPhotoPackage, setState: setSelectedPhotoPackage },
-                  { key: 'entertainment', label: '🎵 Entertainment', state: selectedEntertainment, setState: setSelectedEntertainment },
-                  { key: 'transport', label: '🚗 Bridal Transport', state: selectedTransport, setState: setSelectedTransport },
-                  { key: 'invitations', label: '💌 Wedding Invitations', state: selectedInvitations, setState: setSelectedInvitations },
+                  { key: 'photography', label: 'ðŸ“¸ Photography & Videography', state: selectedPhotoPackage, setState: setSelectedPhotoPackage },
+                  { key: 'entertainment', label: 'ðŸŽµ Entertainment', state: selectedEntertainment, setState: setSelectedEntertainment },
+                  { key: 'transport', label: 'ðŸš— Bridal Transport', state: selectedTransport, setState: setSelectedTransport },
+                  { key: 'invitations', label: 'ðŸ’Œ Wedding Invitations', state: selectedInvitations, setState: setSelectedInvitations },
                 ].map((service) => (
                   <div key={service.key} className="mb-8 last:mb-0">
                     <div className="flex items-center justify-between mb-3">
-                      <h3 className="font-medium text-maroon-700 text-sm">{service.label}</h3>
+                      <h3 className="font-medium text-primary-700 text-sm">{service.label}</h3>
                       {service.state === 0 && (
-                        <span className="text-xs px-2.5 py-1 bg-cream-200 text-maroon-400 rounded-full border border-cream-300">Not included</span>
+                        <span className="text-xs px-2.5 py-1 bg-neutral-200 text-primary-400 rounded-full border border-neutral-300">Not included</span>
                       )}
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
@@ -915,17 +930,17 @@ export default function CalculatorPage() {
                           <div key={index} onClick={() => service.setState(index)}
                             className={`cursor-pointer border-2 rounded-xl p-4 text-center transition-all duration-300 ${
                               isSelected && isNone
-                                ? 'border-maroon-400 bg-maroon-50 shadow-sm'
+                                ? 'border-primary-400 bg-neutral-50 shadow-sm'
                                 : isSelected
-                                  ? 'border-gold-400 bg-gold-50/50 shadow-sm'
+                                  ? 'border-accent-400 bg-accent-50/50 shadow-sm'
                                   : isNone
-                                    ? 'border-dashed border-cream-300 hover:border-maroon-300 bg-cream-50/50'
-                                    : 'border-cream-200 hover:border-gold-300 bg-white'
+                                    ? 'border-dashed border-neutral-300 hover:border-primary-300 bg-neutral-50/50'
+                                    : 'border-neutral-200 hover:border-accent-300 bg-white'
                             }`}
                           >
-                            {isNone && <X className="w-4 h-4 mx-auto mb-1 text-maroon-400" />}
-                            <p className={`font-semibold text-sm ${isNone ? 'text-maroon-500' : 'text-maroon-800'}`}>{pkg.name}</p>
-                            <p className={`font-bold mt-1 ${isNone ? 'text-maroon-400 text-xs' : 'text-gold-600'}`}>
+                            {isNone && <X className="w-4 h-4 mx-auto mb-1 text-primary-400" />}
+                            <p className={`font-semibold text-sm ${isNone ? 'text-primary-500' : 'text-primary-800'}`}>{pkg.name}</p>
+                            <p className={`font-bold mt-1 ${isNone ? 'text-primary-400 text-xs' : 'text-accent-600'}`}>
                               {isNone ? 'Free' : formatPrice(pkg.price)}
                             </p>
                           </div>
@@ -940,20 +955,20 @@ export default function CalculatorPage() {
               <StepCard number={7} title="Budget & Extras" icon={<TrendingDown className="w-5 h-5 text-emerald-600" />}>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-maroon-600 mb-2">Additional Budget (Jewelry, Outfits, etc.)</label>
+                    <label className="block text-sm font-medium text-primary-600 mb-2">Additional Budget (Jewelry, Outfits, etc.)</label>
                     <input type="number" value={additionalBudget} onChange={(e) => setAdditionalBudget(e.target.value)}
                       placeholder="Enter amount in PKR"
-                      className="w-full px-5 py-4 border-2 border-cream-300 rounded-xl focus:ring-2 focus:ring-gold-500 focus:border-gold-500 bg-cream-50 transition-all"
+                      className="w-full px-5 py-4 border-2 border-neutral-300 rounded-xl focus:ring-2 focus:ring-accent-500 focus:border-accent-500 bg-neutral-50 transition-all"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-maroon-600 mb-2">
+                    <label className="block text-sm font-medium text-primary-600 mb-2">
                       Budget Target
-                      <span className="text-maroon-400 font-normal ml-1">(optional — get suggestions)</span>
+                      <span className="text-primary-400 font-normal ml-1">(optional - get suggestions)</span>
                     </label>
                     <input type="number" value={budgetTarget} onChange={(e) => setBudgetTarget(e.target.value)}
                       placeholder="Your maximum budget"
-                      className="w-full px-5 py-4 border-2 border-cream-300 rounded-xl focus:ring-2 focus:ring-gold-500 focus:border-gold-500 bg-cream-50 transition-all"
+                      className="w-full px-5 py-4 border-2 border-neutral-300 rounded-xl focus:ring-2 focus:ring-accent-500 focus:border-accent-500 bg-neutral-50 transition-all"
                     />
                     {budgetSuggestions && (
                       <div className="mt-3 p-3 bg-royal-50 border border-royal-200 rounded-lg">
@@ -971,30 +986,32 @@ export default function CalculatorPage() {
               </StepCard>
             </div>
 
-            {/* ====== RIGHT COLUMN — Sidebar ====== */}
+            {/* ====== RIGHT COLUMN - Sidebar ====== */}
             <div className="lg:col-span-1">
-              <div className="print-area bg-shaadi-card rounded-2xl shadow-festive border border-gold-200/30 sticky top-28 max-h-[calc(100vh-8rem)] overflow-y-auto hide-scrollbar">
+              <div className="print-area bg-shaadi-card rounded-2xl shadow-festive border border-accent-200/30 sticky top-28 max-h-[calc(100vh-8rem)] overflow-y-auto hide-scrollbar">
                 {/* Header */}
-                <div className="gradient-maroon p-6 text-center relative overflow-hidden sparkles-bg">
+                <div className="relative overflow-hidden p-6 text-center" style={{ background: 'linear-gradient(135deg, #45091a 0%, #7a1a37 50%, #45091a 100%)' }}>
+                  <div className="absolute inset-0 texture-paisley opacity-[0.05]"></div>
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-accent-500/15 rounded-full blur-3xl"></div>
                   <div className="relative z-10">
-                    <Calculator className="w-6 h-6 text-mehndi-300 mx-auto mb-2" />
+                    <Calculator className="w-6 h-6 text-accent-300 mx-auto mb-2" />
                     <h2 className="text-xl font-serif text-white">Budget <span className="text-gradient">Summary</span></h2>
-                    <p className="text-xs text-white/40 mt-1">{selectedEvents.length} events · {grandCalculations.totalGuests} total guests</p>
+                    <p className="text-xs text-white/40 mt-1">{selectedEvents.length} events Â· {grandCalculations.totalGuests} total guests</p>
                   </div>
                 </div>
 
                 <div className="p-6">
                   {/* Venue Info */}
-                  <div className="bg-cream-100 rounded-xl p-4 mb-5 border border-gold-200/30">
+                  <div className="bg-neutral-100 rounded-xl p-4 mb-5 border border-accent-200/30">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-serif font-semibold text-maroon-800 text-sm">{currentVenue?.name}</h3>
+                      <h3 className="font-serif font-semibold text-primary-800 text-sm">{currentVenue?.name}</h3>
                       {catInfo && <span className={`text-[9px] px-1.5 py-0.5 rounded-full ${catInfo.badgeClass}`}>{catInfo.icon}</span>}
                     </div>
                   </div>
 
                   {/* Per-Event Breakdown */}
                   <div className="mb-5">
-                    <h4 className="text-xs font-medium text-maroon-500 mb-3 tracking-widest uppercase flex items-center gap-2">
+                    <h4 className="text-xs font-medium text-primary-500 mb-3 tracking-widest uppercase flex items-center gap-2">
                       <BarChart3 className="w-3 h-3" /> Per-Event Cost
                     </h4>
                     {selectedEvents.map(eventId => {
@@ -1006,12 +1023,12 @@ export default function CalculatorPage() {
                           <div className="flex items-center justify-between">
                             <span className={`text-xs font-semibold ${evt.textColor} flex items-center gap-1`}>
                               {evt.icon} {evt.name}
-                              <span className="text-[10px] font-normal text-maroon-400">({evCalc.guests} guests)</span>
+                              <span className="text-[10px] font-normal text-primary-400">({evCalc.guests} guests)</span>
                             </span>
-                            <span className="text-sm font-bold text-maroon-800">{formatPrice(evCalc.eventSubtotal)}</span>
+                            <span className="text-sm font-bold text-primary-800">{formatPrice(evCalc.eventSubtotal)}</span>
                           </div>
-                          <div className="flex gap-3 mt-1 text-[10px] text-maroon-400">
-                            <span>🍽 {formatPrice(evCalc.menuPerHead)}/head</span>
+                          <div className="flex gap-3 mt-1 text-[10px] text-primary-400">
+                            <span>ðŸ½ {formatPrice(evCalc.menuPerHead)}/head</span>
                             <span>{evCalc.dishCount} dishes</span>
                             {evCalc.counterCount > 0 && <span>{evCalc.counterCount} counters</span>}
                           </div>
@@ -1021,17 +1038,17 @@ export default function CalculatorPage() {
                   </div>
 
                   {/* Combined Line Items */}
-                  <div className="space-y-2.5 mb-5 text-sm border-t border-cream-300 pt-4">
-                    <LineItem label="Food — per head (All Events)" value={grandCalculations.foodTotal} />
+                  <div className="space-y-2.5 mb-5 text-sm border-t border-neutral-300 pt-4">
+                    <LineItem label="Food - per head (All Events)" value={grandCalculations.foodTotal} />
                     {grandCalculations.startersTotal > 0 && <LineItem label="Starters (qty based)" value={grandCalculations.startersTotal} />}
                     {grandCalculations.countersTotal > 0 && <LineItem label="Live Counters" value={grandCalculations.countersTotal} />}
-                    {grandCalculations.venueTotal > 0 && <LineItem label={`Venue (×${selectedEvents.length})`} value={grandCalculations.venueTotal} />}
-                    <LineItem label={`Decor (×${selectedEvents.length})`} value={grandCalculations.decorTotal} />
+                    {grandCalculations.venueTotal > 0 && <LineItem label={`Venue (Ã—${selectedEvents.length})`} value={grandCalculations.venueTotal} />}
+                    <LineItem label={`Decor (Ã—${selectedEvents.length})`} value={grandCalculations.decorTotal} />
                     {grandCalculations.photoCost > 0 && <LineItem label="Photography" value={grandCalculations.photoCost} />}
                     {grandCalculations.entertainmentCost > 0 && <LineItem label="Entertainment" value={grandCalculations.entertainmentCost} />}
                     {grandCalculations.transportCost > 0 && <LineItem label="Transport" value={grandCalculations.transportCost} />}
                     {grandCalculations.invitationCost > 0 && <LineItem label="Invitations" value={grandCalculations.invitationCost} />}
-                    <div className="border-t border-cream-300 pt-2.5">
+                    <div className="border-t border-neutral-300 pt-2.5">
                       <LineItem label="Subtotal" value={grandCalculations.subtotal} bold />
                     </div>
                     <LineItem label="Service Tax (5%)" value={grandCalculations.serviceTax} />
@@ -1040,19 +1057,19 @@ export default function CalculatorPage() {
                   </div>
 
                   {/* Grand Total */}
-                  <div className="gradient-maroon rounded-xl p-6 text-center mb-5 relative overflow-hidden">
+                  <div className="bg-primary-950 rounded-xl p-6 text-center mb-5 relative overflow-hidden">
                     <div className="absolute inset-0 sparkles-bg opacity-30"></div>
                     <div className="relative z-10">
                       <p className="text-xs text-white/50 mb-1 tracking-widest uppercase">Estimated Grand Total</p>
                       <AnimatedPrice value={grandCalculations.grandTotal} className="text-3xl font-bold text-gradient" />
-                      <p className="text-sm text-mehndi-300/80 mt-2">~{formatPrice(grandCalculations.perGuest)} per guest <span className="text-xs text-white/40">({grandCalculations.totalGuests} total)</span></p>
+                      <p className="text-sm text-accent-300/80 mt-2">~{formatPrice(grandCalculations.perGuest)} per guest <span className="text-xs text-white/40">({grandCalculations.totalGuests} total)</span></p>
                     </div>
                   </div>
 
                   {/* Pie Chart */}
                   <div className="mb-5">
                     <button onClick={() => setShowBreakdown(!showBreakdown)}
-                      className="w-full flex items-center justify-between text-xs font-medium text-maroon-500 mb-3 tracking-widest uppercase hover:text-gold-600 transition-colors"
+                      className="w-full flex items-center justify-between text-xs font-medium text-primary-500 mb-3 tracking-widest uppercase hover:text-accent-600 transition-colors"
                     >
                       <span className="flex items-center gap-2"><PieChart className="w-3 h-3" /> Visual Breakdown</span>
                       {showBreakdown ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -1072,18 +1089,18 @@ export default function CalculatorPage() {
                       <PartyPopper className="w-4 h-4" /> Finalize Budget
                     </button>
                     <button onClick={() => window.print()}
-                      className="w-full py-3.5 bg-cream-100 hover:bg-cream-200 text-maroon-700 font-semibold rounded-xl transition-all flex items-center justify-center gap-2 text-sm border border-cream-300"
+                      className="w-full py-3.5 bg-neutral-100 hover:bg-neutral-200 text-primary-700 font-semibold rounded-xl transition-all flex items-center justify-center gap-2 text-sm border border-neutral-300"
                     >
                       <Printer className="w-4 h-4" /> Print Estimate
                     </button>
                     <a href={`tel:${currentVenue?.contact?.phone}`}
-                      className="block w-full py-3.5 border-2 border-maroon-700 text-maroon-700 hover:bg-maroon-700 hover:text-mehndi-200 font-semibold rounded-xl transition-all text-center text-sm"
+                      className="block w-full py-3.5 border-2 border-primary-700 text-primary-700 hover:bg-primary-700 hover:text-accent-200 font-semibold rounded-xl transition-all text-center text-sm"
                     >
                       <Phone className="w-4 h-4 inline mr-2" /> Call Venue
                     </a>
                   </div>
 
-                  <p className="text-[10px] text-maroon-400 text-center mt-5">
+                  <p className="text-[10px] text-primary-400 text-center mt-5">
                     * Based on 2025-26 Lahore market rates. Contact venue for exact quotes.
                   </p>
                 </div>
@@ -1103,13 +1120,13 @@ export default function CalculatorPage() {
 // ============================================================
 function StepCard({ number, title, icon, subtitle, children }) {
   return (
-    <div className="bg-shaadi-card rounded-2xl p-8 shadow-sm border border-gold-200/30 hover:shadow-festive transition-shadow duration-500">
-      <h2 className="text-xl font-serif text-maroon-900 mb-2 flex items-center gap-2">
-        <span className="w-9 h-9 bg-gradient-to-br from-gold-500 to-mehndi-600 text-maroon-950 rounded-xl flex items-center justify-center text-sm font-bold shadow-gold">{number}</span>
+    <div className="bg-shaadi-card rounded-2xl p-8 shadow-sm border border-accent-200/30 hover:shadow-festive transition-shadow duration-500">
+      <h2 className="text-xl font-serif text-primary-900 mb-2 flex items-center gap-2">
+        <span className="w-9 h-9 bg-gradient-to-br from-accent-500 to-accent-600 text-primary-950 rounded-xl flex items-center justify-center text-sm font-bold shadow-gold">{number}</span>
         {icon}
         {title}
       </h2>
-      {subtitle && <p className="text-sm text-maroon-400 ml-12 mb-4">{subtitle}</p>}
+      {subtitle && <p className="text-sm text-primary-400 ml-12 mb-4">{subtitle}</p>}
       <div className="mt-4">{children}</div>
     </div>
   );
@@ -1118,8 +1135,8 @@ function StepCard({ number, title, icon, subtitle, children }) {
 function LineItem({ label, value, bold }) {
   return (
     <div className="flex justify-between">
-      <span className={`text-maroon-500 ${bold ? 'font-semibold' : ''}`}>{label}</span>
-      <span className={`text-maroon-700 ${bold ? 'font-bold' : 'font-medium'}`}>{formatPrice(value)}</span>
+      <span className={`text-primary-500 ${bold ? 'font-semibold' : ''}`}>{label}</span>
+      <span className={`text-primary-700 ${bold ? 'font-bold' : 'font-medium'}`}>{formatPrice(value)}</span>
     </div>
   );
 }

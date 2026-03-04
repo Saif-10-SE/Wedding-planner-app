@@ -47,7 +47,7 @@ export default function ImageGallery({ images, title = 'Gallery' }) {
               alt={`${title} ${index + 1}`}
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-maroon-900/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center">
+            <div className="absolute inset-0 bg-gradient-to-t from-primary-950/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center">
               <ZoomIn className="text-white w-8 h-8 drop-shadow-lg" />
             </div>
           </div>
@@ -58,7 +58,7 @@ export default function ImageGallery({ images, title = 'Gallery' }) {
       {selectedIndex !== null && (
         <div
           ref={modalRef}
-          className="fixed inset-0 z-50 bg-maroon-900/95 backdrop-blur-sm flex items-center justify-center"
+          className="fixed inset-0 z-50 bg-primary-950/95 backdrop-blur-sm flex items-center justify-center"
           onClick={(e) => e.target === modalRef.current && setSelectedIndex(null)}
         >
           <button
@@ -68,7 +68,7 @@ export default function ImageGallery({ images, title = 'Gallery' }) {
             <X className="w-6 h-6 text-white" />
           </button>
 
-          <div className="absolute top-4 left-4 px-4 py-2 bg-maroon-800/60 backdrop-blur-sm rounded-full text-white text-sm border border-white/10">
+          <div className="absolute top-4 left-4 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white text-sm border border-white/10">
             📷 {selectedIndex + 1} / {images.length}
           </div>
 
@@ -104,7 +104,7 @@ export default function ImageGallery({ images, title = 'Gallery' }) {
                 key={index}
                 onClick={() => { setSelectedIndex(index); setIsZoomed(false); }}
                 className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
-                  index === selectedIndex ? 'border-mehndi-400 opacity-100 shadow-mehndi' : 'border-transparent opacity-40 hover:opacity-70'
+                  index === selectedIndex ? 'border-accent-400 opacity-100 shadow-lg' : 'border-transparent opacity-40 hover:opacity-70'
                 }`}
               >
                 <img src={image} alt="" className="w-full h-full object-cover" />

@@ -49,60 +49,61 @@ export default function Gallery() {
   return (
     <>
       <Head>
-        <title>Shaadi Gallery 📸 | Lahore Shaadi</title>
+        <title>Wedding Gallery 📸 | Wedify</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content="Lahore ki behtareen shaadi ki tasveerein dekhein. Apni khwaabon ki shaadi ka tasawwur karein." />
+        <meta name="description" content="View the finest wedding photos in Lahore. Envision your dream wedding." />
       </Head>
 
       <Navbar />
 
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-maroon-900 relative overflow-hidden">
+      <section className="pt-32 pb-16 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #45091a 0%, #6b0f18 50%, #45091a 100%)' }}>
+        <div className="absolute inset-0 texture-paisley opacity-[0.04]"></div>
         <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-mehndi-500 rounded-full filter blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-rani-500 rounded-full filter blur-3xl translate-x-1/2 translate-y-1/2"></div>
+          <div className="absolute top-0 left-0 w-96 h-96 bg-accent-500 rounded-full filter blur-[120px] -translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-pink-500 rounded-full filter blur-[100px] translate-x-1/2 translate-y-1/2"></div>
         </div>
         <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-mehndi-500/10 backdrop-blur-sm rounded-full text-mehndi-400 text-xs tracking-widest uppercase mb-6 border border-mehndi-500/20">
-            <Camera className="w-3.5 h-3.5" /> 📸 Asli Shaadi Ki Tasveerein
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-accent-500/10 backdrop-blur-sm rounded-full text-accent-300 text-xs tracking-widest uppercase mb-6 border border-accent-500/20">
+            <Camera className="w-3.5 h-3.5" /> Real Wedding Photos
           </div>
           <h1 className="text-4xl md:text-6xl font-serif text-white mb-4">
-            Shaadi <span className="bg-gradient-to-r from-mehndi-400 via-gold-400 to-haldi-400 bg-clip-text text-transparent">Gallery</span> 🎊
+            Wedding <span className="text-gradient-gold">Gallery</span>
           </h1>
-          <p className="text-white/50 max-w-2xl mx-auto text-lg">
-            Lahore ke mashoor venues ki asli shaadi ki tasveerein dekh kar apni khwaabon ki shaadi ka andaza lagayein ✨
+          <p className="text-white/40 max-w-2xl mx-auto text-lg font-light">
+            Browse real wedding photos from Lahore's finest venues and envision your dream wedding
           </p>
         </div>
       </section>
 
       {/* Filter Bar */}
-      <section className="py-4 bg-white/80 backdrop-blur-md border-b border-mehndi-200 sticky top-20 z-40">
+      <section className="py-4 bg-white/80 backdrop-blur-md border-b border-accent-200 sticky top-20 z-40">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <Filter className="w-5 h-5 text-maroon-300" />
+              <Filter className="w-5 h-5 text-primary-300" />
               <select
                 value={selectedVenue}
                 onChange={(e) => setSelectedVenue(e.target.value)}
-                className="px-4 py-2.5 border border-maroon-200 rounded-xl focus:ring-2 focus:ring-mehndi-500 focus:border-transparent bg-white text-maroon-700"
+                className="px-4 py-2.5 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-accent-500 focus:border-transparent bg-white text-primary-700"
               >
-                <option value="all">🏛️ Sab Venues</option>
+                <option value="all">🏛️ All Venues</option>
                 {marquees.map(m => (
                   <option key={m.slug} value={m.slug}>{m.name}</option>
                 ))}
               </select>
-              <span className="text-maroon-400 text-sm">{imageUrls.length} tasveerein 📷</span>
+              <span className="text-primary-400 text-sm">{imageUrls.length} photos 📷</span>
             </div>
-            <div className="flex items-center gap-1 bg-cream-100 p-1 rounded-xl">
+            <div className="flex items-center gap-1 bg-neutral-100 p-1 rounded-xl">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-2.5 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-white shadow-sm text-mehndi-600' : 'text-maroon-400 hover:text-maroon-600'}`}
+                className={`p-2.5 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-white shadow-sm text-accent-600' : 'text-primary-400 hover:text-primary-600'}`}
               >
                 <Grid className="w-5 h-5" />
               </button>
               <button
                 onClick={() => setViewMode('masonry')}
-                className={`p-2.5 rounded-lg transition-all ${viewMode === 'masonry' ? 'bg-white shadow-sm text-mehndi-600' : 'text-maroon-400 hover:text-maroon-600'}`}
+                className={`p-2.5 rounded-lg transition-all ${viewMode === 'masonry' ? 'bg-white shadow-sm text-accent-600' : 'text-primary-400 hover:text-primary-600'}`}
               >
                 <LayoutGrid className="w-5 h-5" />
               </button>
@@ -112,27 +113,27 @@ export default function Gallery() {
       </section>
 
       {/* Main Gallery */}
-      <section className="py-12 bg-cream-50 min-h-screen">
+      <section className="py-12 min-h-screen" style={{ background: 'linear-gradient(180deg, #f8f6f2 0%, #f5f0e8 100%)' }}>
         <div className="max-w-7xl mx-auto px-4">
           {selectedVenue === 'all' ? (
             <>
               {/* Featured Section */}
               <div className="mb-16">
                 <div className="flex items-center gap-3 mb-8">
-                  <Sparkles className="w-5 h-5 text-mehndi-500" />
-                  <h2 className="text-2xl font-serif text-maroon-800">
-                    Khaas <span className="text-mehndi-600">Lamhaat</span> ✨
+                  <Sparkles className="w-5 h-5 text-accent-500" />
+                  <h2 className="text-2xl font-serif text-primary-800">
+                    Special <span className="text-accent-600">Moments</span>
                   </h2>
                 </div>
-                <ImageGallery images={featuredImages} title="Featured Shaadi Photos" />
+                <ImageGallery images={featuredImages} title="Featured Wedding Photos" />
               </div>
 
               {/* By Venue Sections */}
               {marquees.filter(m => m.gallery.length > 0).map(venue => (
                 <div key={venue.slug} className="mb-16">
                   <div className="flex items-center justify-between mb-8">
-                    <h2 className="text-2xl font-serif text-maroon-800">🏛️ {venue.name}</h2>
-                    <span className="text-sm text-maroon-400 bg-cream-100 px-3 py-1 rounded-full">{venue.gallery.length} photos</span>
+                    <h2 className="text-2xl font-serif text-primary-800">🏛️ {venue.name}</h2>
+                    <span className="text-sm text-primary-400 bg-neutral-100 px-3 py-1 rounded-full">{venue.gallery.length} photos</span>
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {venue.gallery.map((img, index) => (
@@ -146,8 +147,8 @@ export default function Gallery() {
                           alt={`${venue.name} photo ${index + 1}`}
                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-maroon-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end p-4">
-                          <span className="text-white font-medium text-sm tracking-wide">Sab Dekhein &rarr;</span>
+                        <div className="absolute inset-0 bg-gradient-to-t from-primary-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end p-4">
+                          <span className="text-white font-medium text-sm tracking-wide">View All &rarr;</span>
                         </div>
                       </div>
                     ))}
@@ -164,10 +165,10 @@ export default function Gallery() {
       {/* Event Type Categories */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-serif text-maroon-800 mb-3 text-center">
-            Taqreeb Ke Hisaab Se <span className="text-mehndi-600">Dekhein</span> 🎉
+          <h2 className="text-3xl font-serif text-primary-800 mb-3 text-center">
+            Browse by <span className="text-accent-600">Event Type</span>
           </h2>
-          <p className="text-maroon-400 text-center mb-12 max-w-xl mx-auto">Har taqreeb ki khubsurat tasveerein alag se dekhein</p>
+          <p className="text-primary-400 text-center mb-12 max-w-xl mx-auto">View beautiful photos from each event type</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
               { name: '🟡 Mehndi', image: 'https://images.unsplash.com/photo-1560800452-f2d475982b96?w=600', count: 45 },
@@ -184,13 +185,13 @@ export default function Gallery() {
                   alt={category.name}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-maroon-900/80 via-maroon-900/20 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-primary-900/80 via-primary-900/20 to-transparent"></div>
                 <div className="absolute bottom-6 left-6">
                   <h3 className="text-2xl font-serif text-white mb-1">{category.name}</h3>
-                  <p className="text-white/60 text-sm">{category.count} tasveerein</p>
+                  <p className="text-white/60 text-sm">{category.count} photos</p>
                 </div>
-                <div className="absolute top-4 right-4 px-3 py-1 bg-maroon-900/50 backdrop-blur-sm rounded-full text-mehndi-400 text-xs font-medium border border-mehndi-500/20">
-                  Dekhein →
+                <div className="absolute top-4 right-4 px-3 py-1 bg-primary-900/50 backdrop-blur-sm rounded-full text-accent-400 text-xs font-medium border border-accent-500/20">
+                  View →
                 </div>
               </div>
             ))}
@@ -199,23 +200,24 @@ export default function Gallery() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-maroon-900 relative overflow-hidden">
+      <section className="py-20 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #45091a 0%, #6b0f18 50%, #45091a 100%)' }}>
+        <div className="absolute inset-0 texture-paisley opacity-[0.04]"></div>
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-mehndi-500 rounded-full filter blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent-500 rounded-full filter blur-[120px]"></div>
         </div>
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
-          <Camera className="w-10 h-10 text-mehndi-400 mx-auto mb-4" />
+          <Camera className="w-10 h-10 text-accent-400 mx-auto mb-4" />
           <h2 className="text-3xl md:text-4xl font-serif text-white mb-4">
-            Apni Shaadi Ki Tasveerein Share Karein? 📸
+            Share Your Wedding Photos
           </h2>
-          <p className="text-white/50 mb-8 max-w-lg mx-auto">
-            Haal hi mein shaadi hui? Apni khoobsurat yaadein hamari gallery mein shamil karein aur doosron ko inspire karein 💕
+          <p className="text-white/40 mb-8 max-w-lg mx-auto font-light">
+            Recently married? Share your beautiful memories in our gallery and inspire others
           </p>
           <a
             href="mailto:gallery@lahoreshaadi.pk"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-mehndi-500 to-gold-500 text-maroon-900 font-bold rounded-xl shadow-mehndi hover:shadow-lg transition-all"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-accent-500 to-accent-600 text-primary-900 font-bold rounded-xl shadow-lg hover:shadow-gold transition-all"
           >
-            <Camera className="w-5 h-5" /> 📤 Tasveerein Bhejein
+            <Camera className="w-5 h-5" /> Submit Photos
           </a>
         </div>
       </section>

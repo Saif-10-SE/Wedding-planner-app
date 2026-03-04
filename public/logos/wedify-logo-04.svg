@@ -1,0 +1,9 @@
+<svg width="640" height="220" viewBox="0 0 640 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="220" rx="24" fill="#FFF9F3"/>
+  <circle cx="105" cy="110" r="68" fill="#45091A"/>
+  <path d="M76 118C91 91 106 90 120 118" stroke="#E4A62C" stroke-width="10" stroke-linecap="round"/>
+  <path d="M76 102C91 75 106 74 120 102" stroke="#E4A62C" stroke-width="7" stroke-linecap="round" opacity="0.8"/>
+  <path d="M76 134C91 107 106 106 120 134" stroke="#E4A62C" stroke-width="7" stroke-linecap="round" opacity="0.75"/>
+  <text x="196" y="104" font-family="Georgia, serif" font-size="56" fill="#45091A" font-weight="700">Wedify</text>
+  <text x="196" y="146" font-family="Segoe UI, sans-serif" font-size="24" fill="#8D6941" letter-spacing="3">PLAN • STYLE • CELEBRATE</text>
+</svg>

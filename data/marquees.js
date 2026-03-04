@@ -22,20 +22,20 @@ export const categoryInfo = {
   'A': {
     label: 'Premium',
     tagline: 'Elite Class · Exceptional Quality',
-    color: 'burgundy',
+    color: 'emerald',
     badgeClass: 'badge-a',
     cardClass: 'card-a',
     icon: '✦',
-    gradient: 'from-burgundy-800 via-burgundy-600 to-burgundy-800',
+    gradient: 'from-emerald-800 via-emerald-600 to-emerald-800',
   },
   'B': {
     label: 'Upper Mid-Range',
     tagline: 'Quality Service · Great Value',
-    color: 'midnight',
+    color: 'haldi',
     badgeClass: 'badge-b',
     cardClass: 'card-b',
     icon: '◆',
-    gradient: 'from-midnight-700 via-midnight-600 to-midnight-700',
+    gradient: 'from-haldi-700 via-haldi-500 to-haldi-700',
   },
   'C': {
     label: 'Economy',
@@ -44,7 +44,7 @@ export const categoryInfo = {
     badgeClass: 'badge-c',
     cardClass: 'card-c',
     icon: '●',
-    gradient: 'from-gray-600 via-gray-500 to-gray-600',
+    gradient: 'from-emerald-600 via-emerald-400 to-emerald-600',
   }
 };
 
@@ -63,11 +63,11 @@ export const marquees = [
     capacity: { min: 500, max: 3000 },
     rating: 4.9,
     reviews: 245,
-    image: "https://lh3.googleusercontent.com/p/AF1QipNkTpG9ztXRkjqhZMKMz_vNJ3VxfMxfKbOjh_F_=s1360-w1360-h1020",
+    image: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1200&q=80&fit=crop&auto=format",
     gallery: [
-      "https://lh3.googleusercontent.com/p/AF1QipNkTpG9ztXRkjqhZMKMz_vNJ3VxfMxfKbOjh_F_=s1360-w1360-h1020",
-      "https://lh3.googleusercontent.com/p/AF1QipMfWHOGDEjX4hYrVUG0zWnqxFGFHp76E2VB7lVf=s1360-w1360-h1020",
-      "https://lh3.googleusercontent.com/p/AF1QipP4Mu1DHqS6HFQG7qS6K9i5s7kHE_4i8mXO1OJl=s1360-w1360-h1020"
+      "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1200&q=80&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1200&q=80&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=1200&q=80&fit=crop&auto=format"
     ],
     amenities: ["Valet Parking", "5-Star Catering", "Bridal Suite", "Prayer Area", "AC Halls", "Outdoor Lawns", "Helipad"],
     pricing: {
@@ -101,11 +101,11 @@ export const marquees = [
     capacity: { min: 200, max: 1500 },
     rating: 4.8,
     reviews: 312,
-    image: "https://lh3.googleusercontent.com/p/AF1QipN7-dLhQw9t5PHW1l2v2y-OgbhAQ0zLxq-kz6aP=s1360-w1360-h1020",
+    image: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=1200&q=80&fit=crop&auto=format",
     gallery: [
-      "https://lh3.googleusercontent.com/p/AF1QipN7-dLhQw9t5PHW1l2v2y-OgbhAQ0zLxq-kz6aP=s1360-w1360-h1020",
-      "https://lh3.googleusercontent.com/p/AF1QipMgXjJjV0x7Bkse5djTRHBigfDr6zP1EPM_z0fT=s1360-w1360-h1020",
-      "https://lh3.googleusercontent.com/p/AF1QipOkS9cjMfc3pHzM9QgdBBvDMJ0vRdJml7xQs-EV=s1360-w1360-h1020"
+      "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=1200&q=80&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1549488344-cbb6c34cf08b?w=1200&q=80&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1546032996-6dfacbacbf3f?w=1200&q=80&fit=crop&auto=format"
     ],
     amenities: ["Valet Parking", "5-Star Kitchen", "Bridal Room", "Mosque", "Multiple Halls", "Rooftop Option"],
     pricing: {
@@ -141,11 +141,11 @@ export const marquees = [
     capacity: { min: 150, max: 800 },
     rating: 4.7,
     reviews: 189,
-    image: "https://lh3.googleusercontent.com/p/AF1QipP_FqNVTE9QXF4SkWK0bSOnKOQgEZXfjlkfLrgO=s1360-w1360-h1020",
+    image: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=1200&q=80&fit=crop&auto=format",
     gallery: [
-      "https://lh3.googleusercontent.com/p/AF1QipP_FqNVTE9QXF4SkWK0bSOnKOQgEZXfjlkfLrgO=s1360-w1360-h1020",
-      "https://lh3.googleusercontent.com/p/AF1QipMR9m7OzBXG7Hx-J0jGxPFVOJB4xq5d9wE_kRpj=s1360-w1360-h1020",
-      "https://lh3.googleusercontent.com/p/AF1QipOcXhFf0T5k7EvUHy4Xc0pE_c1NTiLhOrCcNiSi=s1360-w1360-h1020"
+      "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=1200&q=80&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1522413452208-996ff3f3e740?w=1200&q=80&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=1200&q=80&fit=crop&auto=format"
     ],
     amenities: ["Heritage Building", "Gardens", "Bridal Suite", "Valet Parking", "AC Halls"],
     pricing: {
@@ -178,10 +178,10 @@ export const marquees = [
     capacity: { min: 200, max: 1200 },
     rating: 4.6,
     reviews: 156,
-    image: "https://lh3.googleusercontent.com/p/AF1QipME-Mw7mzC-T1J-oXLhJ5b9pPE-2k0YqDFaR_Jb=s1360-w1360-h1020",
+    image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1200&q=80&fit=crop&auto=format",
     gallery: [
-      "https://lh3.googleusercontent.com/p/AF1QipME-Mw7mzC-T1J-oXLhJ5b9pPE-2k0YqDFaR_Jb=s1360-w1360-h1020",
-      "https://lh3.googleusercontent.com/p/AF1QipNx7qZCHGO6lj_RNfCfQ0kqpFSCdRgT1-OG5y1a=s1360-w1360-h1020"
+      "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1200&q=80&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1507504031003-b417219a0fde?w=1200&q=80&fit=crop&auto=format"
     ],
     amenities: ["Modern Halls", "Rooftop Venue", "Valet Parking", "Bridal Room", "Prayer Area"],
     pricing: {
@@ -214,10 +214,10 @@ export const marquees = [
     capacity: { min: 300, max: 2000 },
     rating: 4.8,
     reviews: 134,
-    image: "https://lh3.googleusercontent.com/p/AF1QipPXGY4VhWe0-tY4KTPe5s9R2wBe1-b-SxTq5Cta=s1360-w1360-h1020",
+    image: "https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=1200&q=80&fit=crop&auto=format",
     gallery: [
-      "https://lh3.googleusercontent.com/p/AF1QipPXGY4VhWe0-tY4KTPe5s9R2wBe1-b-SxTq5Cta=s1360-w1360-h1020",
-      "https://lh3.googleusercontent.com/p/AF1QipOC9HJVi2lLfFE7hHDJIl4k8rmeWJ3skG8fR0j_=s1360-w1360-h1020"
+      "https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=1200&q=80&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1550005109-ffd4e8d353e3?w=1200&q=80&fit=crop&auto=format"
     ],
     amenities: ["Heritage Venue", "Massive Lawns", "AC Halls", "Reserved Parking", "Members Club"],
     pricing: {
@@ -250,10 +250,10 @@ export const marquees = [
     capacity: { min: 150, max: 1000 },
     rating: 4.7,
     reviews: 98,
-    image: "https://lh3.googleusercontent.com/p/AF1QipO-oHA-pvRJ6CjpdLOy0YKodJ0WtFoF3yI51SAs=s1360-w1360-h1020",
+    image: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1200&q=80&fit=crop&auto=format",
     gallery: [
-      "https://lh3.googleusercontent.com/p/AF1QipO-oHA-pvRJ6CjpdLOy0YKodJ0WtFoF3yI51SAs=s1360-w1360-h1020",
-      "https://lh3.googleusercontent.com/p/AF1QipOFKJkE8m87S_7Ykg7KYw0FFBnPYjO3y4vWi1IX=s1360-w1360-h1020"
+      "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1200&q=80&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=1200&q=80&fit=crop&auto=format"
     ],
     amenities: ["Boutique Hotel", "Intimate Setting", "5-Star Service", "Bridal Suite", "Valet"],
     pricing: {
@@ -289,10 +289,10 @@ export const marquees = [
     capacity: { min: 500, max: 4000 },
     rating: 4.5,
     reviews: 223,
-    image: "https://lh3.googleusercontent.com/p/AF1QipP_7D-SMhp2JmNM4sFzKDfiSxrn7Y3I5Z-0hB7c=s1360-w1360-h1020",
+    image: "https://images.unsplash.com/photo-1553444836-bc6c8d340ba7?w=1200&q=80&fit=crop&auto=format",
     gallery: [
-      "https://lh3.googleusercontent.com/p/AF1QipP_7D-SMhp2JmNM4sFzKDfiSxrn7Y3I5Z-0hB7c=s1360-w1360-h1020",
-      "https://lh3.googleusercontent.com/p/AF1QipPK8-_TdELnLjXjd2Sf5Q0fFNlDi3sOFy2uMZ2Z=s1360-w1360-h1020"
+      "https://images.unsplash.com/photo-1553444836-bc6c8d340ba7?w=1200&q=80&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1585399000684-d2f72660f092?w=1200&q=80&fit=crop&auto=format"
     ],
     amenities: ["Massive Capacity", "Modern Design", "Mall Parking", "Multiple Halls", "AC Throughout"],
     pricing: {
@@ -325,10 +325,10 @@ export const marquees = [
     capacity: { min: 300, max: 1500 },
     rating: 4.6,
     reviews: 167,
-    image: "https://lh3.googleusercontent.com/p/AF1QipN5yvbBuB3N2c1tmI-GFH3xkQd0lFfp2Ng2JWkL=s1360-w1360-h1020",
+    image: "https://images.unsplash.com/photo-1478146896981-b80fe463b330?w=1200&q=80&fit=crop&auto=format",
     gallery: [
-      "https://lh3.googleusercontent.com/p/AF1QipN5yvbBuB3N2c1tmI-GFH3xkQd0lFfp2Ng2JWkL=s1360-w1360-h1020",
-      "https://lh3.googleusercontent.com/p/AF1QipOVFGkAaC0-cqsOjZ6J-dS7q1D-T2rMXuR3z7cg=s1360-w1360-h1020"
+      "https://images.unsplash.com/photo-1478146896981-b80fe463b330?w=1200&q=80&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1200&q=80&fit=crop&auto=format"
     ],
     amenities: ["DHA Location", "Modern Design", "Good Parking", "AC Throughout", "Prayer Area"],
     pricing: {
@@ -364,9 +364,10 @@ export const marquees = [
     capacity: { min: 400, max: 2500 },
     rating: 4.4,
     reviews: 178,
-    image: "https://lh3.googleusercontent.com/p/AF1QipOS6L9BLGiVdSJPVIJveAL_I3I7Wl6RxJQxeK2y=s1360-w1360-h1020",
+    image: "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=1200&q=80&fit=crop&auto=format",
     gallery: [
-      "https://lh3.googleusercontent.com/p/AF1QipOS6L9BLGiVdSJPVIJveAL_I3I7Wl6RxJQxeK2y=s1360-w1360-h1020"
+      "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=1200&q=80&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1200&q=80&fit=crop&auto=format"
     ],
     amenities: ["Large Capacity", "Easy Access", "Ample Parking", "AC Halls", "Open Areas"],
     pricing: {
@@ -399,9 +400,10 @@ export const marquees = [
     capacity: { min: 300, max: 1800 },
     rating: 4.3,
     reviews: 145,
-    image: "https://lh3.googleusercontent.com/p/AF1QipN-3A4kJz-BQQiE7VoLnkSdO7yjk5K0nPAQrc0k=s1360-w1360-h1020",
+    image: "https://images.unsplash.com/photo-1544078751-58fee2d8a03b?w=1200&q=80&fit=crop&auto=format",
     gallery: [
-      "https://lh3.googleusercontent.com/p/AF1QipN-3A4kJz-BQQiE7VoLnkSdO7yjk5K0nPAQrc0k=s1360-w1360-h1020"
+      "https://images.unsplash.com/photo-1544078751-58fee2d8a03b?w=1200&q=80&fit=crop&auto=format",
+      "https://images.unsplash.com/photo-1502635385003-ee1e6a1a742d?w=1200&q=80&fit=crop&auto=format"
     ],
     amenities: ["Historic Location", "Good Parking", "Flexible Spaces", "AC Available"],
     pricing: {

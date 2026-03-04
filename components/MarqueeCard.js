@@ -1,40 +1,87 @@
 import Link from 'next/link';
+import { useEffect, useRef, useState } from 'react';
 import { formatPriceShort, getCategoryBadge } from '@/data/marquees';
 import FavoriteButton from './FavoriteButton';
 import CompareButton from './CompareButton';
-import { MapPin, Users, Star, ArrowRight } from 'lucide-react';
+import { MapPin, Users, Star, ArrowRight, ImageOff } from 'lucide-react';
+
+const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1200&q=80&fit=crop&auto=format';
 
 export default function MarqueeCard({ marquee }) {
   const catInfo = getCategoryBadge(marquee.category);
+  const [imgSrc, setImgSrc] = useState(marquee.image);
+  const [imgLoaded, setImgLoaded] = useState(false);
+  const [imgError, setImgError] = useState(false);
+  const imgRef = useRef(null);
+
+  useEffect(() => {
+    setImgSrc(marquee.image);
+    setImgLoaded(false);
+    setImgError(false);
+  }, [marquee.image]);
+
+  useEffect(() => {
+    const imageElement = imgRef.current;
+    if (!imageElement) return;
+
+    if (imageElement.complete && imageElement.naturalWidth > 0) {
+      setImgLoaded(true);
+    }
+  }, [imgSrc]);
+
+  const handleImageError = () => {
+    if (imgSrc !== FALLBACK_IMAGE) {
+      setImgLoaded(false);
+      setImgError(false);
+      setImgSrc(FALLBACK_IMAGE);
+    } else {
+      setImgLoaded(true);
+      setImgError(true);
+    }
+  };
   
   return (
-    <div className={`group relative bg-white rounded-2xl overflow-hidden card-luxury ${catInfo.cardClass}`}>
-      {/* Category accent line on top */}
-      <div className="absolute top-0 left-0 right-0 h-1 z-10" style={{
-        background: marquee.category === 'A+' 
-          ? 'linear-gradient(90deg, #c9a84c, #e8d5a3, #c9a84c)' 
-          : marquee.category === 'A'
-          ? 'linear-gradient(90deg, #5a0a1e, #8a1538, #5a0a1e)'
-          : marquee.category === 'B'
-          ? 'linear-gradient(90deg, #d63384, #e685b5, #d63384)'
-          : 'linear-gradient(90deg, #047857, #34d399, #047857)'
-      }}></div>
+    <div className="group relative bg-white rounded-2xl overflow-hidden border border-neutral-200/60 shadow-luxury hover:shadow-luxury-lg transition-all duration-700 hover:-translate-y-1">
 
       {/* Image */}
-      <div className="relative h-60 overflow-hidden">
-        <img 
-          src={marquee.image} 
-          alt={marquee.name}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-          loading="lazy"
-        />
+      <div className="relative h-60 overflow-hidden bg-neutral-100">
+        {/* Skeleton shimmer while loading */}
+        {!imgLoaded && !imgError && (
+          <div className="absolute inset-0 z-[1] bg-gradient-to-r from-neutral-100 via-neutral-200 to-neutral-100 animate-pulse" />
+        )}
         
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-maroon-900/70 via-black/20 to-transparent"></div>
+        {/* Error state */}
+        {imgError ? (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-neutral-100 text-neutral-400">
+            <ImageOff className="w-10 h-10 mb-2 opacity-50" />
+            <span className="text-xs font-medium">Image unavailable</span>
+          </div>
+        ) : (
+          <img 
+            ref={imgRef}
+            src={imgSrc} 
+            alt={marquee.name}
+            className={`w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-[1.05] ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+            loading="lazy"
+            onLoad={() => setImgLoaded(true)}
+            onError={handleImageError}
+          />
+        )}
+        
+        {/* Gradient Overlay - darkens on hover for CTA reveal */}
+        <div className="absolute inset-0 bg-gradient-to-t from-primary-950/70 via-primary-950/10 to-transparent transition-opacity duration-400 group-hover:from-primary-950/80 group-hover:via-primary-950/20"></div>
         
         {/* Category Badge */}
         <div className="absolute top-4 left-4 z-10">
-          <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs ${catInfo.badgeClass}`}>
+          <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium backdrop-blur-sm ${
+            marquee.category === 'A+' 
+              ? 'bg-accent-500/90 text-white' 
+              : marquee.category === 'A'
+              ? 'bg-primary-950/70 text-white border border-white/10'
+              : marquee.category === 'B'
+              ? 'bg-white/80 text-primary-900'
+              : 'bg-white/60 text-primary-700'
+          }`}>
             <span>{catInfo.icon}</span>
             {catInfo.label}
           </span>
@@ -48,54 +95,49 @@ export default function MarqueeCard({ marquee }) {
 
         {/* Rating Badge */}
         <div className="absolute bottom-4 left-4 z-10 flex items-center gap-3">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-maroon-900/60 backdrop-blur-sm rounded-lg border border-white/10">
-            <Star className="w-3.5 h-3.5 text-mehndi-400 fill-mehndi-400" />
-            <span className="text-sm font-bold text-white">{marquee.rating}</span>
+          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-white/15 backdrop-blur-md rounded-lg border border-white/10">
+            <Star className="w-3.5 h-3.5 text-accent-400 fill-accent-400" />
+            <span className="text-sm font-semibold text-white">{marquee.rating}</span>
           </div>
-          <span className="text-xs text-white/60">({marquee.reviews} reviews)</span>
+          <span className="text-xs text-white/50">({marquee.reviews} reviews)</span>
         </div>
 
         {/* Price Tag */}
         <div className="absolute bottom-4 right-4 z-10">
-          <div className="bg-maroon-900/60 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-white/10">
-            <p className="text-[10px] text-white/50 uppercase tracking-wider">From</p>
-            <p className="text-sm font-bold text-mehndi-400">{formatPriceShort(marquee.pricing.perHead.min)}<span className="text-white/50 font-normal text-xs">/head</span></p>
+          <div className="bg-white/15 backdrop-blur-md rounded-lg px-3 py-1.5 border border-white/10">
+            <p className="text-[10px] text-white/45 uppercase tracking-wider">From</p>
+            <p className="text-sm font-semibold text-white">{formatPriceShort(marquee.pricing.perHead.min)}<span className="text-white/40 font-normal text-xs">/head</span></p>
           </div>
-        </div>
-
-        {/* Shimmer effect on hover */}
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-          <div className="absolute inset-0 shimmer"></div>
         </div>
       </div>
 
       {/* Content */}
       <div className="p-6">
-        <h3 className="text-lg font-serif font-semibold text-maroon-800 mb-1.5 group-hover:text-mehndi-600 transition-colors duration-300 line-clamp-1">
+        <h3 className="text-lg font-serif font-semibold text-primary-900 mb-1.5 group-hover:text-accent-700 transition-colors duration-500 line-clamp-1">
           {marquee.name}
         </h3>
         
-        <div className="flex items-center text-maroon-400 text-sm mb-3">
-          <MapPin className="w-3.5 h-3.5 mr-1.5 text-mehndi-500/60" />
+        <div className="flex items-center text-primary-400 text-sm mb-3">
+          <MapPin className="w-3.5 h-3.5 mr-1.5 text-primary-300" />
           {marquee.location}
         </div>
 
-        <p className="text-maroon-500 text-sm mb-5 line-clamp-2 leading-relaxed">
+        <p className="text-primary-400 text-sm mb-5 line-clamp-2 leading-relaxed font-light">
           {marquee.description}
         </p>
 
         {/* Info Grid */}
-        <div className="grid grid-cols-2 gap-4 mb-5 py-4 border-t border-b border-maroon-100">
+        <div className="grid grid-cols-2 gap-4 mb-5 py-4 border-t border-b border-neutral-200/60">
           <div>
-            <p className="text-[10px] text-maroon-400 uppercase tracking-widest mb-0.5">Gunjaish 👥</p>
-            <p className="text-sm font-semibold text-maroon-700 flex items-center gap-1">
-              <Users className="w-3.5 h-3.5 text-mehndi-500/70" />
+            <p className="text-[10px] text-primary-400 uppercase tracking-widest mb-0.5">Capacity</p>
+            <p className="text-sm font-semibold text-primary-700 flex items-center gap-1">
+              <Users className="w-3.5 h-3.5 text-primary-300" />
               {marquee.capacity.min.toLocaleString()} - {marquee.capacity.max.toLocaleString()}
             </p>
           </div>
           <div>
-            <p className="text-[10px] text-maroon-400 uppercase tracking-widest mb-0.5">Qeemat 💰</p>
-            <p className="text-sm font-semibold text-mehndi-600">
+            <p className="text-[10px] text-primary-400 uppercase tracking-widest mb-0.5">Price Range</p>
+            <p className="text-sm font-semibold text-primary-600">
               {formatPriceShort(marquee.pricing.perHead.min)} - {formatPriceShort(marquee.pricing.perHead.max)}
             </p>
           </div>
@@ -106,14 +148,14 @@ export default function MarqueeCard({ marquee }) {
           {marquee.amenities.slice(0, 3).map((amenity, index) => (
             <span 
               key={index}
-              className="px-2.5 py-1 bg-cream-100 text-maroon-600 text-[11px] rounded-lg font-medium"
+              className="px-2.5 py-1 bg-neutral-100 text-primary-600 text-[11px] rounded-lg font-medium"
             >
               {amenity}
             </span>
           ))}
           {marquee.amenities.length > 3 && (
-            <span className="px-2.5 py-1 bg-mehndi-50 text-mehndi-700 text-[11px] rounded-lg font-medium">
-              +{marquee.amenities.length - 3} aur
+            <span className="px-2.5 py-1 bg-accent-50 text-accent-700 text-[11px] rounded-lg font-medium">
+              +{marquee.amenities.length - 3} more
             </span>
           )}
         </div>
@@ -122,16 +164,16 @@ export default function MarqueeCard({ marquee }) {
         <div className="flex gap-3">
           <Link 
             href={`/marquees/${marquee.slug}`}
-            className="flex-1 px-4 py-3 bg-maroon-800 hover:bg-maroon-700 text-white text-center font-semibold rounded-xl transition-all duration-300 text-sm group/btn flex items-center justify-center gap-2"
+            className="flex-1 px-4 py-3 bg-primary-950 hover:bg-primary-800 text-white text-center font-medium rounded-xl transition-all duration-500 text-sm group/btn flex items-center justify-center gap-2"
           >
-            🏛️ Details Dekhein
-            <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+            View Details
+            <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
           </Link>
           <Link 
             href={`/calculator?venue=${marquee.slug}`}
-            className="px-4 py-3 border-2 border-mehndi-500/30 text-mehndi-600 hover:bg-mehndi-50 hover:border-mehndi-500/50 font-semibold rounded-xl transition-all duration-300 text-sm"
+            className="px-4 py-3 border border-neutral-300 text-primary-600 hover:bg-neutral-50 hover:border-primary-400 font-medium rounded-xl transition-all duration-500 text-sm"
           >
-            💰 Budget
+            Calculate
           </Link>
         </div>
       </div>

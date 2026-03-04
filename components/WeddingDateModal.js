@@ -27,17 +27,17 @@ export default function WeddingDateModal({ isOpen, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-maroon-900/70 backdrop-blur-sm flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 bg-primary-950/60 backdrop-blur-md flex items-center justify-center p-4"
       onClick={onClose}
     >
       <div
-        className="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden animate-fadeIn border border-mehndi-200"
+        className="bg-white w-full max-w-lg rounded-2xl shadow-luxury-xl overflow-hidden animate-fadeIn border border-neutral-200/60"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-maroon-800 to-maroon-900 p-6 text-white relative overflow-hidden">
+        <div className="bg-primary-950 p-6 text-white relative overflow-hidden">
           <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 right-0 w-48 h-48 bg-mehndi-500 rounded-full filter blur-3xl translate-x-1/2 -translate-y-1/2"></div>
+            <div className="absolute top-0 right-0 w-48 h-48 bg-accent-500 rounded-full filter blur-3xl translate-x-1/2 -translate-y-1/2"></div>
           </div>
           <button
             onClick={onClose}
@@ -45,40 +45,40 @@ export default function WeddingDateModal({ isOpen, onClose }) {
           >
             <X className="w-5 h-5" />
           </button>
-          <Sparkles className="w-10 h-10 mb-3 text-mehndi-400" />
-          <h2 className="text-2xl font-serif relative z-10">📅 Shaadi Ki Tareekh</h2>
-          <p className="text-white/50 text-sm mt-1 relative z-10">Tareekh lagayein aur countdown dekhein 🎊</p>
+          <Sparkles className="w-10 h-10 mb-3 text-accent-400" />
+          <h2 className="text-2xl font-serif relative z-10">Wedding Date</h2>
+          <p className="text-white/40 text-sm mt-1 relative z-10 font-light">Set your date and watch the countdown</p>
         </div>
 
         {/* Content */}
         <div className="p-6">
           <div className="mb-6">
-            <label className="block text-sm font-medium text-maroon-600 mb-2">
-              <Calendar className="inline w-4 h-4 mr-2 text-mehndi-500" />
-              Shaadi Ki Tareekh Chunein
+            <label className="block text-sm font-medium text-primary-600 mb-2">
+              <Calendar className="inline w-4 h-4 mr-2 text-accent-500" />
+              Select Your Date
             </label>
             <input
               type="date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
               min={new Date().toISOString().split('T')[0]}
-              className="w-full px-4 py-3 border-2 border-maroon-200 rounded-xl focus:ring-2 focus:ring-mehndi-500 focus:border-transparent text-lg text-maroon-800"
+              className="w-full px-4 py-3 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-accent-500 focus:border-transparent text-lg text-primary-900 transition-all"
             />
           </div>
 
           {selectedDate && (
-            <div className="bg-cream-50 rounded-xl p-6 mb-6 border border-mehndi-200">
-              <p className="text-center text-sm text-maroon-500 mb-4">⏰ Aapke Khaas Din Tak</p>
+            <div className="bg-neutral-50 rounded-xl p-6 mb-6 border border-neutral-200/60">
+              <p className="text-center text-sm text-primary-400 mb-4 font-light">Countdown to Your Day</p>
               <CountdownTimer targetDate={selectedDate} />
             </div>
           )}
 
           {daysLeft !== null && daysLeft > 0 && (
-            <div className="bg-mehndi-50 border border-mehndi-200 rounded-xl p-4 mb-6 text-center">
-              <p className="text-maroon-700">
-                <span className="font-bold text-2xl text-mehndi-600">{daysLeft}</span> din baaqi hain shaadi mein!
-                {daysLeft < 30 && ' 🎉 Kitna exciting hai!'}
-                {daysLeft > 365 && ' Planning ke liye kaafi waqt hai! 📋'}
+            <div className="bg-accent-50 border border-accent-200 rounded-xl p-4 mb-6 text-center">
+              <p className="text-primary-700">
+                <span className="font-serif font-semibold text-2xl text-accent-600">{daysLeft}</span> days until your wedding!
+                {daysLeft < 30 && ' 🎉 How exciting!'}
+                {daysLeft > 365 && ' Plenty of time to plan! 📋'}
               </p>
             </div>
           )}
@@ -87,17 +87,17 @@ export default function WeddingDateModal({ isOpen, onClose }) {
             {weddingDate && (
               <button
                 onClick={handleClear}
-                className="px-6 py-3 border-2 border-maroon-200 text-maroon-500 hover:bg-cream-50 font-semibold rounded-xl transition-all"
+                className="px-6 py-3 border border-neutral-300 text-primary-500 hover:bg-neutral-50 font-medium rounded-xl transition-all duration-500"
               >
-                🗑️ Hatayein
+                Clear
               </button>
             )}
             <button
               onClick={handleSave}
               disabled={!selectedDate}
-              className="flex-1 py-3 bg-gradient-to-r from-mehndi-500 to-gold-500 hover:from-mehndi-600 hover:to-gold-600 disabled:from-cream-300 disabled:to-cream-400 text-maroon-900 disabled:text-maroon-400 font-bold rounded-xl transition-all shadow-mehndi disabled:shadow-none"
+              className="flex-1 py-3 bg-primary-950 hover:bg-primary-800 disabled:bg-neutral-200 text-white disabled:text-primary-400 font-medium rounded-xl transition-all duration-500 shadow-sm disabled:shadow-none"
             >
-              💖 Tareekh Save Karein
+              Save Date
             </button>
           </div>
         </div>

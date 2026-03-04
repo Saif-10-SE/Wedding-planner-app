@@ -47,41 +47,42 @@ export default function Marquees() {
   return (
     <>
       <Head>
-        <title>Saare Marquees | Lahore Shaadi</title>
+        <title>All Marquees | Wedify</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Navbar />
 
-      {/* Hero — Desi Style */}
-      <section className="pt-32 pb-16 bg-maroon-900 relative overflow-hidden">
+      {/* Hero — Royal Maroon */}
+      <section className="pt-32 pb-16 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #45091a 0%, #7a1a37 50%, #45091a 100%)' }}>
+        <div className="absolute inset-0 texture-paisley opacity-[0.04]"></div>
         <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-mehndi-500 rounded-full filter blur-3xl translate-x-1/2 -translate-y-1/2"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-rani-500 rounded-full filter blur-3xl -translate-x-1/2 translate-y-1/2"></div>
+          <div className="absolute top-0 right-0 w-96 h-96 bg-accent-500 rounded-full filter blur-[120px] translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-wine-700 rounded-full filter blur-[100px] -translate-x-1/2 translate-y-1/2"></div>
         </div>
         <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-mehndi-500/10 backdrop-blur-md rounded-full text-mehndi-400 text-xs tracking-widest uppercase mb-6 border border-mehndi-500/20">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-accent-500/10 backdrop-blur-md rounded-full text-accent-300 text-xs tracking-widest uppercase mb-6 border border-accent-500/20">
             <Crown className="w-3.5 h-3.5" />
             Premium Collection
           </div>
-          <h1 className="text-4xl md:text-6xl font-serif text-cream-100 mb-4">
-            Discover <span className="bg-gradient-to-r from-mehndi-400 via-gold-400 to-haldi-400 bg-clip-text text-transparent">Premium Marquees</span> 🏛️
+          <h1 className="text-4xl md:text-6xl font-serif text-neutral-100 mb-4">
+            Discover <span className="text-gradient-gold">Premium Marquees</span>
           </h1>
-          <p className="text-cream-200/50 max-w-2xl mx-auto leading-relaxed">
-            Lahore ke sab se shaaandaar marquees — ultra-luxury 5-star venues se lekar budget-friendly elegant halls tak
+          <p className="text-white/40 max-w-2xl mx-auto leading-relaxed font-light">
+            Lahore's finest marquees — from ultra-luxury 5-star venues to budget-friendly elegant halls
           </p>
         </div>
       </section>
 
-      {/* Category Quick Filters — Desi Style */}
-      <section className="bg-white border-b border-maroon-100 py-6">
+      {/* Category Quick Filters */}
+      <section className="bg-white border-b border-neutral-200 py-6">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-wrap justify-center gap-3">
             <button
               onClick={() => setFilters(f => ({ ...f, category: '' }))}
               className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 text-sm ${
                 !filters.category
-                  ? 'bg-gradient-to-r from-maroon-800 to-maroon-700 text-cream-100 shadow-maroon'
-                  : 'bg-cream-100 text-maroon-700 hover:bg-cream-200 border border-maroon-100'
+                  ? 'bg-gradient-to-r from-primary-950 to-maroon-800 text-white shadow-maroon'
+                  : 'bg-neutral-100 text-primary-700 hover:bg-neutral-200 border border-neutral-200'
               }`}
             >
               All Venues ({marquees.length})
@@ -94,8 +95,8 @@ export default function Marquees() {
                   onClick={() => setFilters(f => ({ ...f, category: cat }))}
                   className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 text-sm inline-flex items-center gap-2 ${
                     filters.category === cat
-                      ? 'bg-gradient-to-r from-maroon-800 to-maroon-700 text-cream-100 shadow-maroon'
-                      : 'bg-cream-100 text-maroon-700 hover:bg-cream-200 border border-maroon-100'
+                      ? 'bg-gradient-to-r from-primary-950 to-maroon-800 text-white shadow-maroon'
+                      : 'bg-neutral-100 text-primary-700 hover:bg-neutral-200 border border-neutral-200'
                   }`}
                 >
                   <span className="text-xs">{info.icon}</span> {info.label} ({count})
@@ -106,20 +107,20 @@ export default function Marquees() {
         </div>
       </section>
 
-      {/* Filters Bar — Desi Style */}
-      <section className="bg-cream-50 border-b border-maroon-100 sticky top-20 z-40 shadow-sm">
+      {/* Filters Bar */}
+      <section className="bg-cream-100 border-b border-neutral-200 sticky top-20 z-40 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex flex-wrap gap-3 items-center">
-            <SlidersHorizontal className="w-4 h-4 text-maroon-500" />
+            <SlidersHorizontal className="w-4 h-4 text-primary-500" />
             <select value={filters.area} onChange={(e) => setFilters({ ...filters, area: e.target.value })}
-              className="px-4 py-2.5 border border-maroon-200 rounded-xl focus:ring-2 focus:ring-mehndi-500 focus:border-mehndi-500 text-sm bg-white text-maroon-700"
+              className="px-4 py-2.5 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-accent-500 focus:border-accent-500 text-sm bg-white text-primary-700"
             >
               <option value="">All Areas</option>
               {areas.map(area => <option key={area} value={area}>{area}</option>)}
             </select>
 
             <select value={filters.minCapacity} onChange={(e) => setFilters({ ...filters, minCapacity: e.target.value })}
-              className="px-4 py-2.5 border border-maroon-200 rounded-xl focus:ring-2 focus:ring-mehndi-500 focus:border-mehndi-500 text-sm bg-white text-maroon-700"
+              className="px-4 py-2.5 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-accent-500 focus:border-accent-500 text-sm bg-white text-primary-700"
             >
               <option value="">Any Capacity</option>
               <option value="500">500+ Guests</option>
@@ -129,7 +130,7 @@ export default function Marquees() {
             </select>
 
             <select value={filters.maxBudget} onChange={(e) => setFilters({ ...filters, maxBudget: e.target.value })}
-              className="px-4 py-2.5 border border-maroon-200 rounded-xl focus:ring-2 focus:ring-mehndi-500 focus:border-mehndi-500 text-sm bg-white text-maroon-700"
+              className="px-4 py-2.5 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-accent-500 focus:border-accent-500 text-sm bg-white text-primary-700"
             >
               <option value="">Any Budget</option>
               <option value="2500">Up to PKR 2,500/head</option>
@@ -139,7 +140,7 @@ export default function Marquees() {
             </select>
 
             <select value={filters.sortBy} onChange={(e) => setFilters({ ...filters, sortBy: e.target.value })}
-              className="px-4 py-2.5 border border-maroon-200 rounded-xl focus:ring-2 focus:ring-mehndi-500 focus:border-mehndi-500 text-sm bg-white text-maroon-700"
+              className="px-4 py-2.5 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-accent-500 focus:border-accent-500 text-sm bg-white text-primary-700"
             >
               <option value="rating">Sort by Rating</option>
               <option value="price-low">Price: Low → High</option>
@@ -148,21 +149,21 @@ export default function Marquees() {
             </select>
 
             {activeFilterCount > 0 && (
-              <button onClick={clearFilters} className="px-4 py-2.5 text-rani-600 hover:text-rani-800 text-sm font-medium flex items-center gap-1.5 transition-colors">
+              <button onClick={clearFilters} className="px-4 py-2.5 text-rose-600 hover:text-rose-800 text-sm font-medium flex items-center gap-1.5 transition-colors">
                 <X className="w-3.5 h-3.5" /> Clear ({activeFilterCount})
               </button>
             )}
 
             <div className="ml-auto flex items-center gap-2">
-              <span className="text-maroon-500 text-sm mr-2">{filteredMarquees.length} venues</span>
-              <div className="flex items-center gap-1 bg-white p-1 rounded-lg border border-maroon-200">
+              <span className="text-primary-500 text-sm mr-2">{filteredMarquees.length} venues</span>
+              <div className="flex items-center gap-1 bg-white p-1 rounded-lg border border-neutral-300">
                 <button onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-maroon-800 text-cream-100' : 'text-maroon-400 hover:text-maroon-700'}`}
+                  className={`p-2 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-primary-950 text-accent-300' : 'text-primary-400 hover:text-primary-700'}`}
                 >
                   <Grid className="w-4 h-4" />
                 </button>
                 <button onClick={() => setViewMode('list')}
-                  className={`p-2 rounded-md transition-colors ${viewMode === 'list' ? 'bg-maroon-800 text-cream-100' : 'text-maroon-400 hover:text-maroon-700'}`}
+                  className={`p-2 rounded-md transition-colors ${viewMode === 'list' ? 'bg-primary-950 text-accent-300' : 'text-primary-400 hover:text-primary-700'}`}
                 >
                   <LayoutList className="w-4 h-4" />
                 </button>
@@ -173,7 +174,7 @@ export default function Marquees() {
       </section>
 
       {/* Marquees Grid */}
-      <section className="py-12 bg-cream-50 min-h-screen">
+      <section className="py-12 min-h-screen" style={{ background: 'linear-gradient(180deg, #f8f6f2 0%, #f5f0e8 100%)' }}>
         <div className="max-w-7xl mx-auto px-4">
           {/* Category info banner */}
           {filters.category && categoryInfo[filters.category] && (
@@ -198,15 +199,15 @@ export default function Marquees() {
 
           {filteredMarquees.length === 0 && (
             <div className="text-center py-20">
-              <div className="w-20 h-20 bg-cream-200 rounded-full flex items-center justify-center mx-auto mb-6">
-                <MapPin className="w-10 h-10 text-maroon-300" />
+              <div className="w-20 h-20 bg-neutral-200 rounded-full flex items-center justify-center mx-auto mb-6">
+                <MapPin className="w-10 h-10 text-primary-300" />
               </div>
-              <h3 className="text-xl font-serif text-maroon-800 mb-2">Koi venue nahi mila 😔</h3>
-              <p className="text-maroon-500 mb-6">Filters adjust karein aur dobaara try karein</p>
+              <h3 className="text-xl font-serif text-primary-800 mb-2">No venue found 😔</h3>
+              <p className="text-primary-500 mb-6">Try adjusting your filters and search again</p>
               <button onClick={clearFilters}
-                className="px-6 py-3 bg-gradient-to-r from-mehndi-500 to-gold-500 hover:from-mehndi-400 hover:to-gold-400 text-maroon-900 font-semibold rounded-xl transition-all shadow-mehndi"
+                className="px-6 py-3 bg-gradient-to-r from-accent-500 to-accent-600 hover:from-accent-400 hover:to-accent-500 text-primary-900 font-semibold rounded-xl transition-all shadow-lg"
               >
-                Filters Clear Karein
+                Clear Filters
               </button>
             </div>
           )}

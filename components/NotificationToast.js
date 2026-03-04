@@ -20,11 +20,11 @@ export default function NotificationToast() {
 
   return (
     <div className="fixed bottom-6 right-6 z-50 animate-slideUp">
-      <div className={`flex items-center gap-3 px-5 py-4 rounded-xl shadow-2xl ${
-        isSuccess ? 'bg-gradient-to-r from-maroon-800 to-maroon-900 border border-mehndi-500/30' : 'bg-rani-600'
+      <div className={`flex items-center gap-3 px-5 py-4 rounded-xl shadow-luxury-lg backdrop-blur-sm ${
+        isSuccess ? 'bg-primary-950 border border-accent-500/20' : 'bg-rose-600'
       } text-white`}>
         {isSuccess ? (
-          <CheckCircle className="w-5 h-5 text-mehndi-400" />
+          <CheckCircle className="w-5 h-5 text-accent-400" />
         ) : (
           <AlertCircle className="w-5 h-5" />
         )}

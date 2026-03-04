@@ -23,6 +23,9 @@ export function WeddingProvider({ children }) {
   
   // Inquiry Cart
   const [inquiryCart, setInquiryCart] = useState([]);
+
+  // Submitted Inquiries
+  const [submittedInquiries, setSubmittedInquiries] = useState([]);
   
   // Notification
   const [notification, setNotification] = useState(null);
@@ -35,12 +38,14 @@ export function WeddingProvider({ children }) {
       const savedRecent = localStorage.getItem('recently_viewed');
       const savedCompare = localStorage.getItem('compare_list');
       const savedInquiry = localStorage.getItem('inquiry_cart');
+      const savedSubmittedInquiries = localStorage.getItem('submitted_inquiries');
       
       if (savedFavorites) setFavorites(JSON.parse(savedFavorites));
       if (savedDate) setWeddingDate(new Date(savedDate));
       if (savedRecent) setRecentlyViewed(JSON.parse(savedRecent));
       if (savedCompare) setCompareList(JSON.parse(savedCompare));
       if (savedInquiry) setInquiryCart(JSON.parse(savedInquiry));
+      if (savedSubmittedInquiries) setSubmittedInquiries(JSON.parse(savedSubmittedInquiries));
     }
   }, []);
 
@@ -74,6 +79,12 @@ export function WeddingProvider({ children }) {
       localStorage.setItem('inquiry_cart', JSON.stringify(inquiryCart));
     }
   }, [inquiryCart]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('submitted_inquiries', JSON.stringify(submittedInquiries));
+    }
+  }, [submittedInquiries]);
 
   // Show notification
   const showNotification = (message, type = 'success') => {
@@ -176,6 +187,35 @@ export function WeddingProvider({ children }) {
     showNotification('Removed from inquiry list');
   };
 
+  // Submit inquiry record
+  const submitInquiryRecord = (payload) => {
+    const record = {
+      id: `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      status: 'new',
+      createdAt: new Date().toISOString(),
+      ...payload,
+    };
+
+    setSubmittedInquiries(prev => [record, ...prev]);
+    return record;
+  };
+
+  const updateInquiryStatus = (id, status) => {
+    setSubmittedInquiries(prev => prev.map(item => (
+      item.id === id
+        ? {
+            ...item,
+            status,
+            updatedAt: new Date().toISOString(),
+          }
+        : item
+    )));
+  };
+
+  const removeSubmittedInquiry = (id) => {
+    setSubmittedInquiries(prev => prev.filter(item => item.id !== id));
+  };
+
   // Get days until wedding
   const getDaysUntilWedding = () => {
     if (!weddingDate) return null;
@@ -219,6 +259,10 @@ export function WeddingProvider({ children }) {
     inquiryCart,
     addToInquiry,
     removeFromInquiry,
+    submittedInquiries,
+    submitInquiryRecord,
+    updateInquiryStatus,
+    removeSubmittedInquiry,
     
     // Notification
     notification,

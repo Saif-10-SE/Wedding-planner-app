@@ -1,0 +1,8 @@
+<svg width="640" height="220" viewBox="0 0 640 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="220" rx="24" fill="#FFFFFF"/>
+  <circle cx="108" cy="110" r="66" fill="#5B0F20"/>
+  <path d="M68 109C78 93 87 91 96 106C104 120 114 122 124 103C131 89 141 90 150 109" stroke="#E4A62C" stroke-width="11" stroke-linecap="round"/>
+  <circle cx="108" cy="110" r="54" stroke="#E4A62C" stroke-width="3" stroke-dasharray="5 7"/>
+  <text x="198" y="108" font-family="Georgia, serif" font-size="56" fill="#5B0F20" font-weight="700">Wedify</text>
+  <text x="200" y="146" font-family="Segoe UI, sans-serif" font-size="22" fill="#9C7248" letter-spacing="2">ELEGANT CELEBRATIONS</text>
+</svg>

@@ -3,14 +3,14 @@ import { useEffect, useState } from 'react';
 const COLORS = [
   '#c9a84c', // gold
   '#eab308', // haldi
-  '#6b0f18', // maroon
-  '#db2777', // rani
-  '#059669', // emerald
-  '#ec4899', // pink
-  '#fde68a', // cream gold
-  '#ad1825', // deep red
-  '#a07c2a', // mehndi
+  '#064e3b', // deep emerald
   '#f59e0b', // amber
+  '#059669', // emerald
+  '#34d399', // light emerald
+  '#fde68a', // cream gold
+  '#047857', // emerald dark
+  '#a07c2a', // antique gold
+  '#10b981', // green
 ];
 
 const SHAPES = ['circle', 'square', 'triangle', 'star'];

@@ -24,12 +24,12 @@ export default function CompareButton({ slug, className = '', size = 'md' }) {
         e.stopPropagation();
         toggleCompare(slug);
       }}
-      className={`${sizes[size]} rounded-full flex items-center justify-center transition-all ${
+      className={`${sizes[size]} rounded-full flex items-center justify-center transition-all duration-500 ${
         inCompare 
-          ? 'bg-mehndi-500 text-maroon-900 scale-110 shadow-mehndi' 
-          : 'bg-white/90 backdrop-blur-sm text-maroon-500 hover:bg-mehndi-50 hover:text-mehndi-600'
-      } shadow-lg hover:shadow-xl ${className}`}
-      title={inCompare ? 'Compare se hatayein' : 'Compare mein shamil karein'}
+          ? 'bg-accent-500 text-white scale-110 shadow-luxury' 
+          : 'bg-white/90 backdrop-blur-sm text-primary-400 hover:bg-accent-50 hover:text-accent-600'
+      } shadow-luxury hover:shadow-luxury-md ${className}`}
+      title={inCompare ? 'Remove from compare' : 'Add to compare'}
     >
       <GitCompare className={iconSizes[size]} />
     </button>

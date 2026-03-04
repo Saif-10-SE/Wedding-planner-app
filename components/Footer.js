@@ -11,7 +11,7 @@ export default function Footer() {
   const handleSubscribe = (e) => {
     e.preventDefault();
     if (email) {
-      showNotification('Shaadi family mein khush aamdeed! 🎉💌', 'success');
+      showNotification('Welcome to the Shaadi family! 🎉💌', 'success');
       setEmail('');
     }
   };
@@ -30,37 +30,20 @@ export default function Footer() {
 
   return (
     <footer className="relative overflow-hidden">
-      {/* Mughal Border Top */}
-      <div className="h-2 bg-gradient-to-r from-mehndi-600 via-gold-500 to-rani-500"></div>
-
-      {/* Newsletter Section */}
-      <div className="relative bg-gradient-to-br from-maroon-900 via-maroon-800 to-maroon-900 py-20 overflow-hidden">
-        {/* Decorative Patterns */}
-        <div className="absolute top-0 left-0 w-64 h-64 opacity-10">
-          <div className="w-full h-full border-2 border-mehndi-500 rounded-full"></div>
-          <div className="absolute inset-4 border-2 border-gold-500 rounded-full"></div>
-          <div className="absolute inset-8 border-2 border-rani-500 rounded-full"></div>
-        </div>
-        <div className="absolute bottom-0 right-0 w-64 h-64 opacity-10">
-          <div className="w-full h-full border-2 border-mehndi-500 rounded-full"></div>
-          <div className="absolute inset-4 border-2 border-gold-500 rounded-full"></div>
-          <div className="absolute inset-8 border-2 border-rani-500 rounded-full"></div>
-        </div>
-        <div className="absolute top-20 right-10 w-32 h-32 bg-mehndi-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-10 left-20 w-40 h-40 bg-rani-500/5 rounded-full blur-3xl"></div>
+      {/* ─── Subscribe Section ─── */}
+      <div className="relative bg-primary-950 py-16 overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent-500/20 to-transparent"></div>
+        <div className="absolute top-10 right-10 w-48 h-48 bg-accent-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-10 left-10 w-40 h-40 bg-primary-800/20 rounded-full blur-3xl"></div>
         
-        <div className="max-w-7xl mx-auto px-4 lg:px-8 relative z-10">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
             <div className="text-center lg:text-left max-w-md">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-mehndi-500/10 rounded-full text-mehndi-400 text-xs tracking-widest uppercase mb-4 border border-mehndi-500/20">
-                <Sparkles className="w-3.5 h-3.5 animate-sparkle" />
-                Shaadi Inspiration
-              </div>
-              <h3 className="text-3xl md:text-4xl font-serif text-cream-100 mb-3">
-                Dulhan ki <span className="bg-gradient-to-r from-mehndi-400 via-gold-400 to-haldi-400 bg-clip-text text-transparent">Diary</span> 💍
+              <h3 className="text-2xl md:text-3xl font-serif text-white mb-2">
+                Subscribe for <span className="text-accent-400 italic font-light">Ideas</span>
               </h3>
-              <p className="text-cream-200/50 leading-relaxed">
-                Subscribe for exclusive shaadi tips, mehndi designs, trending decor ideas, seasonal offers & early access to premium venue packages.
+              <p className="text-white/30 text-sm leading-relaxed font-light">
+                Inspiration, planning tips, and exclusive venue updates delivered to your inbox.
               </p>
             </div>
             <form onSubmit={handleSubscribe} className="flex w-full lg:w-auto">
@@ -69,15 +52,14 @@ export default function Footer() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Apna email daalen..."
-                  className="flex-1 lg:w-96 px-6 py-4 rounded-l-2xl bg-cream-100/5 border border-mehndi-500/20 border-r-0 text-cream-100 placeholder-cream-200/30 focus:outline-none focus:border-mehndi-500/50 focus:bg-cream-100/10 transition-all duration-300"
+                  placeholder="Your email address"
+                  className="flex-1 lg:w-80 px-5 py-3.5 rounded-l-xl bg-white/5 border border-white/10 border-r-0 text-white placeholder-white/25 focus:outline-none focus:border-accent-500/40 focus:bg-white/8 transition-all duration-300 text-sm"
                   required
                 />
                 <button
                   type="submit"
-                  className="px-8 py-4 bg-gradient-to-r from-mehndi-500 via-gold-500 to-haldi-500 hover:from-mehndi-400 hover:via-gold-400 hover:to-haldi-400 text-maroon-900 font-bold rounded-r-2xl transition-all duration-300 flex items-center gap-2 shadow-mehndi hover:shadow-lg whitespace-nowrap"
+                  className="px-6 py-3.5 bg-accent-500 hover:bg-accent-400 text-white font-medium rounded-r-xl transition-all duration-300 flex items-center gap-2 shadow-sm hover:shadow-gold whitespace-nowrap text-sm tracking-wide"
                 >
-                  <Send className="w-4 h-4" />
                   Subscribe
                 </button>
               </div>
@@ -86,66 +68,80 @@ export default function Footer() {
         </div>
       </div>
       
-      {/* Main Footer */}
-      <div className="bg-maroon-900 relative">
-        {/* Ornamental divider */}
-        <div className="absolute top-0 left-0 right-0 flex items-center justify-center">
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent to-mehndi-500/30"></div>
-          <span className="px-4 text-mehndi-500/40 text-sm">✦ ✦ ✦</span>
-          <div className="h-px flex-1 bg-gradient-to-l from-transparent to-mehndi-500/30"></div>
-        </div>
+      {/* ─── Main Footer ─── */}
+      <div className="bg-primary-950 relative">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent"></div>
         
-        <div className="max-w-7xl mx-auto px-4 lg:px-8 py-20">
-          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-14">
-            {/* Brand */}
-            <div className="lg:col-span-2">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-br from-mehndi-500 via-gold-500 to-haldi-500 rounded-2xl flex items-center justify-center shadow-mehndi">
-                  <Crown className="w-7 h-7 text-maroon-900" />
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 lg:gap-14">
+            
+            {/* Contact Info */}
+            <div className="col-span-2 md:col-span-4 lg:col-span-1">
+              <div className="flex items-center space-x-2.5 mb-5">
+                <div className="w-10 h-10 bg-white/8 rounded-xl flex items-center justify-center border border-white/10">
+                  <Crown className="w-5 h-5 text-accent-400" />
                 </div>
                 <div>
-                  <h3 className="font-serif text-2xl text-cream-100 tracking-wide">
-                    Lahore <span className="bg-gradient-to-r from-mehndi-400 to-gold-400 bg-clip-text text-transparent font-bold">Shaadi</span>
+                  <h3 className="font-serif text-lg text-white tracking-wide">
+                    Lahore <span className="text-accent-400 italic font-light">Shaadi</span>
                   </h3>
-                  <p className="text-[10px] text-mehndi-500/60 tracking-[0.25em] uppercase -mt-0.5 font-medium">✦ Desi Weddings ✦</p>
                 </div>
               </div>
-              <p className="text-cream-200/40 mb-8 leading-relaxed max-w-sm">
-                Lahore ke behtareen marquees, caterers aur wedding vendors — sab ek jagah. Grand, festive aur desi — kyunke aapki shaadi behtareen honi chahiye! 🎊
+              <p className="text-white/30 mb-6 text-sm leading-relaxed font-light max-w-xs">
+                Lahore's premium wedding planning platform — curated venues, trusted vendors, and smart tools for your perfect day.
               </p>
               
+              {/* Contact Details */}
+              <ul className="space-y-3 mb-6">
+                <li>
+                  <a href="tel:+923001234567" className="flex items-center gap-2.5 text-white/35 hover:text-accent-400 transition-colors text-sm group">
+                    <Phone className="w-3.5 h-3.5 text-white/20 group-hover:text-accent-400/60 transition-colors" />
+                    +92 300 1234567
+                  </a>
+                </li>
+                <li>
+                  <a href="mailto:info@lahoreshaadi.pk" className="flex items-center gap-2.5 text-white/35 hover:text-accent-400 transition-colors text-sm group">
+                    <Mail className="w-3.5 h-3.5 text-white/20 group-hover:text-accent-400/60 transition-colors" />
+                    info@lahoreshaadi.pk
+                  </a>
+                </li>
+                <li>
+                  <div className="flex items-center gap-2.5 text-white/35 text-sm">
+                    <MapPin className="w-3.5 h-3.5 text-white/20" />
+                    Lahore, Punjab, Pakistan
+                  </div>
+                </li>
+              </ul>
+              
               {/* Social Links */}
-              <div className="flex gap-3">
+              <div className="flex gap-2">
                 {[
-                  { Icon: Facebook, label: 'Facebook', hoverBg: 'hover:bg-blue-500/20 hover:border-blue-500/30', hoverText: 'group-hover:text-blue-400' },
-                  { Icon: Instagram, label: 'Instagram', hoverBg: 'hover:bg-rani-500/20 hover:border-rani-500/30', hoverText: 'group-hover:text-rani-400' },
-                  { Icon: Twitter, label: 'Twitter', hoverBg: 'hover:bg-sky-500/20 hover:border-sky-500/30', hoverText: 'group-hover:text-sky-400' },
-                  { Icon: Youtube, label: 'Youtube', hoverBg: 'hover:bg-red-500/20 hover:border-red-500/30', hoverText: 'group-hover:text-red-400' },
-                ].map(({ Icon, label, hoverBg, hoverText }) => (
-                  <a key={label} href="#" className={`w-11 h-11 bg-cream-100/5 ${hoverBg} border border-cream-100/10 rounded-xl flex items-center justify-center transition-all duration-300 group`} aria-label={label}>
-                    <Icon className={`w-4.5 h-4.5 text-cream-200/40 ${hoverText} transition-colors duration-300`} />
+                  { Icon: Facebook, label: 'Facebook' },
+                  { Icon: Instagram, label: 'Instagram' },
+                  { Icon: Twitter, label: 'Twitter' },
+                  { Icon: Youtube, label: 'Youtube' },
+                ].map(({ Icon, label }) => (
+                  <a key={label} href="#" className="w-9 h-9 bg-white/5 hover:bg-accent-500/15 border border-white/8 hover:border-accent-500/25 rounded-lg flex items-center justify-center transition-all duration-300 group" aria-label={label}>
+                    <Icon className="w-4 h-4 text-white/30 group-hover:text-accent-400 transition-colors" />
                   </a>
                 ))}
               </div>
             </div>
 
-            {/* Quick Links */}
+            {/* Venues */}
             <div>
-              <h4 className="font-serif text-lg mb-6 text-cream-100 flex items-center gap-2">
-                <span className="text-mehndi-500">✦</span> Quick Links
-              </h4>
-              <ul className="space-y-3.5">
+              <h4 className="text-[11px] font-medium mb-6 text-white/60 uppercase tracking-[0.2em]">Venues</h4>
+              <ul className="space-y-3">
                 {[
                   { name: 'Browse Venues', href: '/marquees' },
-                  { name: 'Budget Calculator', href: '/calculator' },
                   { name: 'Compare Venues', href: '/compare' },
-                  { name: 'Find Vendors', href: '/vendors' },
-                  { name: 'Planning Checklist', href: '/checklist' },
                   { name: 'Photo Gallery', href: '/gallery' },
+                  { name: 'Mall Road', href: '/marquees?area=Mall%20Road' },
+                  { name: 'Gulberg', href: '/marquees?area=Gulberg' },
+                  { name: 'DHA', href: '/marquees?area=DHA' },
                 ].map((link) => (
                   <li key={link.name}>
-                    <Link href={link.href} className="text-cream-200/40 hover:text-mehndi-400 transition-all duration-300 flex items-center group text-sm">
-                      <span className="w-1.5 h-1.5 bg-mehndi-500/30 rounded-full mr-3 group-hover:w-2.5 group-hover:bg-mehndi-400 transition-all duration-300"></span>
+                    <Link href={link.href} className="text-white/30 hover:text-accent-400 transition-colors text-sm font-light">
                       {link.name}
                     </Link>
                   </li>
@@ -153,95 +149,65 @@ export default function Footer() {
               </ul>
             </div>
 
-            {/* Popular Areas */}
+            {/* Planning */}
             <div>
-              <h4 className="font-serif text-lg mb-6 text-cream-100 flex items-center gap-2">
-                <span className="text-rani-500">✦</span> Popular Areas
-              </h4>
-              <ul className="space-y-3.5">
-                {['Mall Road', 'Gulberg', 'DHA', 'Cantt', 'Canal Road', 'Walton'].map((area) => (
-                  <li key={area}>
-                    <Link href={`/marquees?area=${encodeURIComponent(area)}`} className="text-cream-200/40 hover:text-mehndi-400 transition-all duration-300 flex items-center text-sm group">
-                      <MapPin className="w-3 h-3 mr-2 text-rani-500/30 group-hover:text-rani-400 transition-colors" />
-                      {area}
+              <h4 className="text-[11px] font-medium mb-6 text-white/60 uppercase tracking-[0.2em]">Planning</h4>
+              <ul className="space-y-3">
+                {[
+                  { name: 'Budget Calculator', href: '/calculator' },
+                  { name: 'Wedding Checklist', href: '/checklist' },
+                  { name: 'Find Vendors', href: '/vendors' },
+                  { name: 'Favorites', href: '/favorites' },
+                  { name: 'Testimonials', href: '/testimonials' },
+                ].map((link) => (
+                  <li key={link.name}>
+                    <Link href={link.href} className="text-white/30 hover:text-accent-400 transition-colors text-sm font-light">
+                      {link.name}
                     </Link>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Contact */}
+            {/* About */}
             <div>
-              <h4 className="font-serif text-lg mb-6 text-cream-100 flex items-center gap-2">
-                <span className="text-gold-500">✦</span> Contact
-              </h4>
-              <ul className="space-y-5">
-                <li>
-                  <a href="tel:+923001234567" className="flex items-start hover:text-mehndi-400 transition-all duration-300 group">
-                    <div className="w-10 h-10 bg-mehndi-500/5 rounded-xl flex items-center justify-center mr-3 flex-shrink-0 group-hover:bg-mehndi-500/10 border border-mehndi-500/10 group-hover:border-mehndi-500/20 transition-all duration-300">
-                      <Phone className="w-4 h-4 text-mehndi-500/60 group-hover:text-mehndi-400" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] text-cream-200/30 uppercase tracking-wider">Call karein</p>
-                      <p className="text-cream-200/50 group-hover:text-mehndi-400 text-sm transition-colors">+92 300 1234567</p>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a href="mailto:info@lahoreshaadi.pk" className="flex items-start hover:text-mehndi-400 transition-all duration-300 group">
-                    <div className="w-10 h-10 bg-mehndi-500/5 rounded-xl flex items-center justify-center mr-3 flex-shrink-0 group-hover:bg-mehndi-500/10 border border-mehndi-500/10 group-hover:border-mehndi-500/20 transition-all duration-300">
-                      <Mail className="w-4 h-4 text-mehndi-500/60 group-hover:text-mehndi-400" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] text-cream-200/30 uppercase tracking-wider">Email bhejein</p>
-                      <p className="text-cream-200/50 group-hover:text-mehndi-400 text-sm transition-colors break-all">info@lahoreshaadi.pk</p>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <div className="flex items-start">
-                    <div className="w-10 h-10 bg-rani-500/5 rounded-xl flex items-center justify-center mr-3 flex-shrink-0 border border-rani-500/10">
-                      <MapPin className="w-4 h-4 text-rani-500/60" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] text-cream-200/30 uppercase tracking-wider">Location</p>
-                      <p className="text-cream-200/50 text-sm">Lahore, Punjab, Pakistan 🇵🇰</p>
-                    </div>
-                  </div>
-                </li>
+              <h4 className="text-[11px] font-medium mb-6 text-white/60 uppercase tracking-[0.2em]">About</h4>
+              <ul className="space-y-3">
+                {[
+                  { name: 'About Us', href: '#' },
+                  { name: 'How It Works', href: '#' },
+                  { name: 'Privacy Policy', href: '#' },
+                  { name: 'Terms of Service', href: '#' },
+                  { name: 'FAQ', href: '#' },
+                ].map((link) => (
+                  <li key={link.name}>
+                    <Link href={link.href} className="text-white/30 hover:text-accent-400 transition-colors text-sm font-light">
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
 
           {/* Bottom Bar */}
-          <div className="mt-16 pt-8 relative">
-            {/* Ornamental divider */}
-            <div className="absolute top-0 left-0 right-0 flex items-center justify-center">
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent to-mehndi-500/20"></div>
-              <span className="px-3 text-mehndi-500/30 text-xs">❋</span>
-              <div className="h-px flex-1 bg-gradient-to-l from-transparent to-mehndi-500/20"></div>
-            </div>
+          <div className="mt-14 pt-6 border-t border-white/8">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <p className="text-cream-200/25 text-sm text-center md:text-left">
-                © {new Date().getFullYear()} Lahore Shaadi. Sab haqooq mahfooz hain.
+              <p className="text-white/20 text-xs font-light">
+                © {new Date().getFullYear()} Wedify. All rights reserved.
               </p>
-              <div className="flex items-center gap-8 text-sm text-cream-200/25">
-                <Link href="#" className="hover:text-mehndi-400 transition-colors">Privacy</Link>
-                <Link href="#" className="hover:text-mehndi-400 transition-colors">Terms</Link>
-                <Link href="#" className="hover:text-mehndi-400 transition-colors">FAQs</Link>
-              </div>
-              <p className="text-cream-200/25 text-sm flex items-center">
-                Made with <Heart className="w-3.5 h-3.5 text-rani-500 mx-1.5 fill-rani-500" /> in Lahore 🇵🇰
+              <p className="text-white/20 text-xs flex items-center font-light">
+                Made with <Heart className="w-3 h-3 text-rose-500 mx-1 fill-rose-500" /> in Lahore
               </p>
             </div>
           </div>
         </div>
       </div>
       
-      {/* Scroll to Top Button */}
+      {/* Scroll to Top */}
       <button
         onClick={scrollToTop}
-        className={`fixed bottom-8 right-8 w-12 h-12 bg-gradient-to-r from-mehndi-500 via-gold-500 to-haldi-500 text-maroon-900 rounded-2xl shadow-mehndi hover:shadow-lg flex items-center justify-center transition-all duration-500 hover:-translate-y-1 hover:scale-110 z-40 ${
+        className={`fixed bottom-8 right-8 w-11 h-11 bg-primary-900 hover:bg-primary-800 text-accent-400 rounded-xl shadow-luxury hover:shadow-luxury-md flex items-center justify-center transition-all duration-500 hover:-translate-y-1 z-40 border border-white/10 ${
           showScrollTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
         }`}
         aria-label="Scroll to top"
