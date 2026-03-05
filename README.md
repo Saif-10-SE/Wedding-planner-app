@@ -63,6 +63,16 @@ GEMINI_MODEL=gemini-1.5-flash
 
 If no key is configured, the assistant returns a configuration error message from the backend.
 
+## Inquiry Backend Storage
+
+Inquiries are now stored on the server using a file-backed data store instead of browser-only localStorage.
+
+- API: `GET/POST /api/inquiries`
+- API: `PATCH/DELETE /api/inquiries/:id`
+- Storage file: `.data/inquiries.json` (ignored from git)
+
+The backend includes duplicate submission protection to prevent repeated identical inquiries from cluttering the dashboard.
+
 ## Project Structure
 
 ```

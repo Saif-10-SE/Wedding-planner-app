@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Calendar, Users, Mail, Phone, MapPin, Send, Check } from 'lucide-react';
+import { Calendar, Users, Mail, Phone, Send, Check } from 'lucide-react';
 import { useWedding } from '@/context/WeddingContext';
 
 export default function InquiryForm({ venue, onSuccess }) {
@@ -19,17 +19,22 @@ export default function InquiryForm({ venue, onSuccess }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    submitInquiryRecord({
-      venueSlug: venue?.slug || null,
-      venueName: venue?.name || 'General Inquiry',
-      ...formData,
-    });
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    showNotification('Inquiry sent successfully! 📩 ✅');
-    if (onSuccess) onSuccess(formData);
+    try {
+      setIsSubmitting(true);
+      const result = await submitInquiryRecord({
+        venueSlug: venue?.slug || null,
+        venueName: venue?.name || 'General Inquiry',
+        ...formData,
+      });
+
+      setIsSubmitted(true);
+      showNotification(result?.deduplicated ? 'Duplicate inquiry detected - using existing record.' : 'Inquiry sent successfully! 📩 ✅');
+      if (onSuccess) onSuccess(formData);
+    } catch (error) {
+      showNotification(error?.message || 'Unable to send inquiry right now.', 'error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e) => {

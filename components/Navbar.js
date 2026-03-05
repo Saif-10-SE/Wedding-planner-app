@@ -45,7 +45,6 @@ export default function Navbar() {
         { name: 'Inquiry Dashboard', href: '/dashboard', icon: <LayoutDashboard className="w-4 h-4" />, desc: 'Track and manage inquiries' },
       ]
     },
-    { name: 'AI Assistant', href: '/assistant' },
     { name: 'Blog', href: '/testimonials' },
     { name: 'Contact', href: '#contact' },
   ];

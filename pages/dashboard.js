@@ -26,17 +26,52 @@ export default function DashboardPage() {
   const { submittedInquiries, updateInquiryStatus, removeSubmittedInquiry, showNotification } = useWedding();
   const [statusFilter, setStatusFilter] = useState('all');
 
+  const uniqueInquiries = useMemo(() => {
+    const seen = new Set();
+    return submittedInquiries.filter((item) => {
+      const key = [
+        item.email?.toLowerCase?.() || '',
+        item.phone || '',
+        item.eventDate || '',
+        item.venueSlug || '',
+        item.eventType || '',
+      ].join('|');
+
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }, [submittedInquiries]);
+
   const filteredInquiries = useMemo(() => {
-    if (statusFilter === 'all') return submittedInquiries;
-    return submittedInquiries.filter(item => item.status === statusFilter);
-  }, [submittedInquiries, statusFilter]);
+    if (statusFilter === 'all') return uniqueInquiries;
+    return uniqueInquiries.filter(item => item.status === statusFilter);
+  }, [uniqueInquiries, statusFilter]);
 
   const counts = useMemo(() => ({
-    total: submittedInquiries.length,
-    new: submittedInquiries.filter(i => i.status === 'new').length,
-    inProgress: submittedInquiries.filter(i => i.status === 'in_progress').length,
-    entertained: submittedInquiries.filter(i => i.status === 'entertained').length,
-  }), [submittedInquiries]);
+    total: uniqueInquiries.length,
+    new: uniqueInquiries.filter(i => i.status === 'new').length,
+    inProgress: uniqueInquiries.filter(i => i.status === 'in_progress').length,
+    entertained: uniqueInquiries.filter(i => i.status === 'entertained').length,
+  }), [uniqueInquiries]);
+
+  const handleStatusUpdate = async (id, status, successMessage) => {
+    try {
+      await updateInquiryStatus(id, status);
+      showNotification(successMessage);
+    } catch (error) {
+      showNotification(error?.message || 'Unable to update inquiry.', 'error');
+    }
+  };
+
+  const handleRemove = async (id) => {
+    try {
+      await removeSubmittedInquiry(id);
+      showNotification('Inquiry removed');
+    } catch (error) {
+      showNotification(error?.message || 'Unable to remove inquiry.', 'error');
+    }
+  };
 
   return (
     <>
@@ -141,28 +176,19 @@ export default function DashboardPage() {
 
                     <div className="mt-4 flex flex-wrap gap-2">
                       <button
-                        onClick={() => {
-                          updateInquiryStatus(inquiry.id, 'in_progress');
-                          showNotification('Inquiry moved to In Progress');
-                        }}
+                        onClick={() => handleStatusUpdate(inquiry.id, 'in_progress', 'Inquiry moved to In Progress')}
                         className="px-3 py-2 text-xs rounded-lg border border-amber-300 text-amber-700 bg-amber-50 hover:bg-amber-100"
                       >
                         Mark In Progress
                       </button>
                       <button
-                        onClick={() => {
-                          updateInquiryStatus(inquiry.id, 'entertained');
-                          showNotification('Inquiry marked as Entertained ✅');
-                        }}
+                        onClick={() => handleStatusUpdate(inquiry.id, 'entertained', 'Inquiry marked as Entertained ✅')}
                         className="px-3 py-2 text-xs rounded-lg border border-emerald-300 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 inline-flex items-center gap-1"
                       >
                         <CheckCircle2 className="w-3.5 h-3.5" /> Mark Entertained
                       </button>
                       <button
-                        onClick={() => {
-                          removeSubmittedInquiry(inquiry.id);
-                          showNotification('Inquiry removed');
-                        }}
+                        onClick={() => handleRemove(inquiry.id)}
                         className="px-3 py-2 text-xs rounded-lg border border-rose-300 text-rose-700 bg-rose-50 hover:bg-rose-100 inline-flex items-center gap-1"
                       >
                         <Trash2 className="w-3.5 h-3.5" /> Remove

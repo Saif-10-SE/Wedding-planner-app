@@ -38,14 +38,12 @@ export function WeddingProvider({ children }) {
       const savedRecent = localStorage.getItem('recently_viewed');
       const savedCompare = localStorage.getItem('compare_list');
       const savedInquiry = localStorage.getItem('inquiry_cart');
-      const savedSubmittedInquiries = localStorage.getItem('submitted_inquiries');
       
       if (savedFavorites) setFavorites(JSON.parse(savedFavorites));
       if (savedDate) setWeddingDate(new Date(savedDate));
       if (savedRecent) setRecentlyViewed(JSON.parse(savedRecent));
       if (savedCompare) setCompareList(JSON.parse(savedCompare));
       if (savedInquiry) setInquiryCart(JSON.parse(savedInquiry));
-      if (savedSubmittedInquiries) setSubmittedInquiries(JSON.parse(savedSubmittedInquiries));
     }
   }, []);
 
@@ -81,10 +79,20 @@ export function WeddingProvider({ children }) {
   }, [inquiryCart]);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('submitted_inquiries', JSON.stringify(submittedInquiries));
-    }
-  }, [submittedInquiries]);
+    const loadSubmittedInquiries = async () => {
+      try {
+        const response = await fetch('/api/inquiries');
+        const payload = await response.json();
+        if (response.ok) {
+          setSubmittedInquiries(Array.isArray(payload?.inquiries) ? payload.inquiries : []);
+        }
+      } catch {
+        setSubmittedInquiries([]);
+      }
+    };
+
+    loadSubmittedInquiries();
+  }, []);
 
   // Show notification
   const showNotification = (message, type = 'success') => {
@@ -188,31 +196,59 @@ export function WeddingProvider({ children }) {
   };
 
   // Submit inquiry record
-  const submitInquiryRecord = (payload) => {
-    const record = {
-      id: `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-      status: 'new',
-      createdAt: new Date().toISOString(),
-      ...payload,
-    };
+  const submitInquiryRecord = async (payload) => {
+    const response = await fetch('/api/inquiries', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
 
-    setSubmittedInquiries(prev => [record, ...prev]);
-    return record;
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data?.error || 'Failed to submit inquiry');
+    }
+
+    const inquiry = data?.inquiry;
+    if (!inquiry) {
+      throw new Error('Invalid inquiry response');
+    }
+
+    setSubmittedInquiries(prev => {
+      const exists = prev.some(item => item.id === inquiry.id);
+      if (exists) return prev;
+      return [inquiry, ...prev];
+    });
+
+    return data;
   };
 
-  const updateInquiryStatus = (id, status) => {
+  const updateInquiryStatus = async (id, status) => {
+    const response = await fetch(`/api/inquiries/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data?.error || 'Failed to update inquiry status');
+    }
+
     setSubmittedInquiries(prev => prev.map(item => (
-      item.id === id
-        ? {
-            ...item,
-            status,
-            updatedAt: new Date().toISOString(),
-          }
-        : item
+      item.id === id ? data.inquiry : item
     )));
+
+    return data.inquiry;
   };
 
-  const removeSubmittedInquiry = (id) => {
+  const removeSubmittedInquiry = async (id) => {
+    const response = await fetch(`/api/inquiries/${id}`, {
+      method: 'DELETE',
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data?.error || 'Failed to remove inquiry');
+    }
+
     setSubmittedInquiries(prev => prev.filter(item => item.id !== id));
   };
 
